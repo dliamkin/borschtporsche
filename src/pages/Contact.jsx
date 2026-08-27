@@ -168,6 +168,9 @@ export default function Contact() {
     const [fields, setFields] = useState({ name: "", email: "", message: "" });
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+    const [sendError, setSendError] = useState("");
+    // Honeypot - hidden from people, catnip for bots. See src/lib/contact.js.
+    const [botcheck, setBotcheck] = useState("");
     const [source, setSource] = useState("fan");
     const [cooking, setCooking] = useState(false);
     const [whoosh, setWhoosh] = useState(false);
@@ -242,6 +245,7 @@ export default function Contact() {
         const value = e.target.value;
         setFields((f) => ({ ...f, [key]: value }));
         setErrors((err) => ({ ...err, [key]: undefined }));
+        setStatus((s) => (s === "error" ? "idle" : s));
         touchBurner();
         if (key === "message") {
             const lower = value.toLowerCase();
@@ -296,11 +300,15 @@ export default function Contact() {
         setFields({ name: "", email: "", message: "" });
 
         setStatus("sending");
+        setSendError("");
         try {
-            await submitContactMessage(payload);
+            await submitContactMessage({ ...payload, botcheck });
             setStatus("sent");
             setTimeout(() => setStatus((s) => (s === "sent" ? "idle" : s)), 3000);
-        } catch {
+        } catch (err) {
+            // Put the message back in the box so nothing typed is lost.
+            setFields(payload);
+            setSendError(err?.message ?? "");
             setStatus("error");
         }
     }
@@ -398,6 +406,17 @@ export default function Contact() {
                                 )}
                             </div>
 
+                            <input
+                                className="contact-botcheck"
+                                type="text"
+                                name="botcheck"
+                                tabIndex={-1}
+                                autoComplete="off"
+                                aria-hidden="true"
+                                value={botcheck}
+                                onChange={(e) => setBotcheck(e.target.value)}
+                            />
+
                             <div className="contact-submit-row">
                                 <button
                                     className="btn btn-primary contact-submit"
@@ -411,11 +430,18 @@ export default function Contact() {
                                 </span>
                             </div>
 
-                            {status === "error" && (
-                                <div className="contact-status contact-status-err">
-                                    Something went wrong - try again in a minute.
-                                </div>
-                            )}
+                            <div className="contact-status-slot" aria-live="polite">
+                                {status === "error" && (
+                                    <div className="contact-status contact-status-err">
+                                        Something went wrong - try again in a minute.
+                                        {sendError && (
+                                            <span className="contact-status-detail">
+                                                {sendError}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </form>
 
                         <div
