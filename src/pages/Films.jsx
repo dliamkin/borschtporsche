@@ -149,9 +149,7 @@ export default function Films() {
             {/* Dims with the rest of the page in theatre mode - see global.css */}
             <ParticleField />
 
-            <div className="films-dimmable">
-                <Nav />
-            </div>
+            <Nav className="films-dimmable" />
 
             <main className="page-main">
                 <div className="films-shell">

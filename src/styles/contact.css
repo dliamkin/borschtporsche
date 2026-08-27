@@ -1,9 +1,9 @@
 /* ---------- Contact ---------- */
 .contact-page {
     position: relative;
-    overflow: hidden;
+    overflow: clip; /* not `hidden` - that would break the sticky nav */
 }
-.contact-page .nav,
+/* (.nav is intentionally excluded: it manages its own stacking in global.css) */
 .contact-page .page-main,
 .contact-page .footer {
     position: relative;

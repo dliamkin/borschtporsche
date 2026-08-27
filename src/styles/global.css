@@ -89,13 +89,25 @@ img {
 }
 
 /* ---------- Nav ---------- */
+/* Sticky bar: transparent at the top of the page, tints once you scroll.
+   Sits above the phone drawer (z 50) so the hamburger doubles as the close X.
+   Note: sticky needs every ancestor to use `overflow: clip`, not `hidden`. */
 .nav {
-    position: relative;
-    z-index: 10;
+    position: sticky;
+    top: 0;
+    z-index: 60;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 64px 0;
+    /* Bottom padding gives the tinted bar breathing room; the negative margin
+       cancels it out so page layout below is unchanged. */
+    padding: 24px 64px 12px;
+    margin-bottom: -12px;
+    background: rgba(0, 0, 0, 0);
+    transition: background-color 0.5s ease;
+}
+.nav.is-scrolled {
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .nav-wordmark {
@@ -125,43 +137,61 @@ img {
     padding-bottom: 6px;
 }
 
+/* Hamburger: three bars that morph into an X when the drawer is open.
+   Bars are 2px with a 5px gap, so the outer bars travel 7px to meet the middle. */
 .nav-hamburger {
+    --bar-h: 2px;
+    --bar-gap: 5px;
     display: none;
     flex-direction: column;
-    gap: 5px;
+    gap: var(--bar-gap);
     padding: 6px 2px;
     background: none;
     border: 0;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 .nav-hamburger span {
     width: 22px;
-    height: 2px;
+    height: var(--bar-h);
+    border-radius: 1px;
     background: var(--pink);
+    transition:
+        transform 0.3s ease-in-out,
+        opacity 0.2s ease-in-out;
+}
+.nav-hamburger.is-open span:nth-child(1) {
+    transform: translateY(calc(var(--bar-h) + var(--bar-gap))) rotate(45deg);
+}
+.nav-hamburger.is-open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.nav-hamburger.is-open span:nth-child(3) {
+    transform: translateY(calc(-1 * (var(--bar-h) + var(--bar-gap)))) rotate(-45deg);
 }
 
-/* Phone drawer (not mocked - full-screen overlay, same link styling) */
+/* Phone drawer: full-screen overlay portaled to <body>, under the sticky nav.
+   Always mounted; fades in/out via opacity, visibility keeps it inert when closed. */
 .nav-drawer {
     position: fixed;
     inset: 0;
     z-index: 50;
-    background: rgba(12, 9, 11, 0.98);
+    background: var(--page-black);
     display: flex;
     flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.3s ease,
+        visibility 0s linear 0.3s;
 }
-.nav-drawer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-}
-.nav-drawer-close {
-    background: none;
-    border: 0;
-    color: var(--pink);
-    font: 300 34px/1 var(--font-heading);
-    padding: 0 2px;
-    cursor: pointer;
+.nav-drawer.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition:
+        opacity 0.3s ease,
+        visibility 0s;
 }
 .nav-drawer-links {
     flex: 1;
@@ -185,7 +215,8 @@ img {
 
 @media (max-width: 1100px) {
     .nav {
-        padding: 20px 36px 0;
+        padding: 20px 36px 10px;
+        margin-bottom: -10px;
     }
     .nav-wordmark {
         font-size: 17px;
@@ -203,6 +234,7 @@ img {
 @media (max-width: 700px) {
     .nav {
         padding: 16px 20px;
+        margin-bottom: 0;
     }
     .nav-wordmark {
         font-size: 16px;
