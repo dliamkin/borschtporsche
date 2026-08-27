@@ -236,6 +236,10 @@ img {
         padding: 16px 20px;
         margin-bottom: 0;
     }
+    /* Phones: darker tint so the bar reads clearly over busy backgrounds */
+    .nav.is-scrolled {
+        background: rgba(0, 0, 0, 0.8);
+    }
     .nav-wordmark {
         font-size: 16px;
     }

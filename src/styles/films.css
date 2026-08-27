@@ -257,8 +257,15 @@
         font-size: 11px;
         letter-spacing: 1.5px;
     }
+    /* Projector bleeds edge to edge: cancel the shell gutter, square the corners */
     .projector {
-        margin-top: 16px;
+        margin: 16px -20px 0;
+        border-radius: 0;
+    }
+    .projector-sprocket {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
     }
     .films-ticker {
         margin-top: 18px;

@@ -899,8 +899,17 @@
     .click-hint {
         padding-bottom: 0;
     }
+    /* Phones: the panel bleeds to the page edges so its own padding is the only
+       gutter (no padding-inside-padding), but it keeps its tinted, blurred
+       surface and top/bottom hairlines so the form still stands out from the
+       ghost/particle layers behind it. */
     .contact-panel {
+        margin: 0 -20px;
         padding: 22px 20px;
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
     }
     .contact-submit {
         width: 100%;
