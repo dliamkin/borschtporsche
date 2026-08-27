@@ -24,27 +24,108 @@
     overflow: hidden;
     pointer-events: none;
 }
+.ghost-layer {
+    --ghost-scale: 1;
+}
 .ghost-line {
+    --gs: 32; /* base size in px, set per line; scaled per breakpoint */
     position: absolute;
     max-width: 620px;
-    font: italic 400 19px/1.5 var(--font-body);
-    color: rgba(245, 238, 242, 0.28);
-    white-space: pre-wrap;
-}
-.ghost-line-big {
-    font: 600 42px/1.2 var(--font-heading);
+    font: 600 calc(var(--gs) * var(--ghost-scale) * 1px) / 1.2 var(--font-heading);
     letter-spacing: 2px;
     text-transform: uppercase;
     color: rgba(242, 143, 216, 0.3);
+    white-space: pre-wrap;
 }
+/* Above the form: keyword replies and the launched message. */
+.ghost-layer-front {
+    z-index: 2;
+}
+
+/* Send = launch: the typed message lifts off the textarea and floats up. */
 .ghost-line-launch {
-    animation: ghostDrift 6.5s ease-out forwards;
+    max-width: none;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text);
+    text-shadow: 0 0 14px rgba(242, 143, 216, 0.55);
+    animation: ghostLaunch 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
 }
+
+/* The form talks back: a reply beside the message box. */
+.ghost-line-reply {
+    max-width: none;
+    font: 600 24px/1.25 var(--font-heading);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--pink-light);
+    text-shadow:
+        0 0 10px rgba(242, 143, 216, 0.55),
+        0 0 28px rgba(217, 79, 174, 0.35);
+    animation: ghostReply 5.6s ease-out forwards;
+}
+
 .ghost-ch {
     opacity: 0;
 }
 .ghost-ch.is-on {
     animation: ghost 5.4s forwards;
+}
+.ghost-line-launch .ghost-ch {
+    display: inline-block;
+    opacity: 1;
+    white-space: pre-wrap;
+}
+.ghost-line-launch .ghost-ch.is-off {
+    animation: ghostLetterOff 1.1s ease-out forwards;
+}
+@keyframes ghostLaunch {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        transform: translateY(-120px) scale(1.03);
+    }
+}
+@keyframes ghostLetterOff {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-22px);
+        filter: blur(3px);
+    }
+}
+@keyframes ghostReply {
+    0% {
+        transform: translateY(14px);
+    }
+    100% {
+        transform: translateY(-70px);
+    }
+}
+.ghost-line-reply-narrow {
+    font-size: 18px;
+    animation-name: ghostReplyNarrow;
+}
+@keyframes ghostReplyNarrow {
+    0% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+@keyframes ghostLaunchNarrow {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        transform: translateY(-80px) scale(1.02);
+    }
 }
 @keyframes ghost {
     0% {
@@ -93,29 +174,79 @@
     max-width: 460px;
 }
 
-/* ---------- Fridge magnets ---------- */
-.magnets {
+/* ---------- Mixer channels (outbound links) ---------- */
+.channels {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 12px;
     margin-top: 12px;
 }
-.magnet {
-    display: inline-block;
+.channel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px 10px 12px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 8px;
+    background: rgba(12, 9, 11, 0.5);
+    color: var(--text);
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.25s ease,
+        transform 0.2s ease;
+}
+.channel:hover {
+    color: var(--text);
+    border-color: rgba(242, 143, 216, 0.55);
+    background: rgba(30, 14, 26, 0.7);
+    box-shadow: 0 0 24px rgba(217, 79, 174, 0.22);
+    transform: translateY(-2px);
+}
+.channel-meter {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    width: 27px;
+    height: 22px;
+}
+.channel-bar {
+    display: block;
+    width: 3px;
+    border-radius: 2px 2px 0 0;
+    background: linear-gradient(180deg, var(--pink-light), var(--pink-mid));
+    opacity: 0.45;
+    transform-origin: 50% 100%;
+    transition: opacity 0.2s ease;
+}
+.channel:hover .channel-bar {
+    opacity: 1;
+    animation: meter 0.55s ease-in-out infinite alternate;
+}
+@keyframes meter {
+    from {
+        transform: scaleY(0.35);
+    }
+    to {
+        transform: scaleY(1.1);
+    }
+}
+.channel-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.channel-verb {
+    font: 500 10px/1 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245, 238, 242, 0.45);
+}
+.channel-label {
     font: 600 13px/1 var(--font-heading);
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--page-black);
-    background: linear-gradient(135deg, #f28fd8, #d94fae);
-    padding: 12px 16px;
-    border-radius: 6px;
-    box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    transition: transform 0.25s ease;
-}
-.magnet:hover {
-    color: var(--page-black);
+    color: var(--pink);
 }
 
 /* ---------- Form panel ---------- */
@@ -135,6 +266,71 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.contact-panel.is-dissolving {
+    pointer-events: none;
+    animation: panelSmoke 1s cubic-bezier(0.4, 0, 0.7, 0.6) forwards;
+}
+@keyframes panelSmoke {
+    0% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+    }
+    35% {
+        opacity: 0.85;
+        filter: blur(2px) brightness(1.15);
+        mix-blend-mode: screen;
+    }
+    100% {
+        opacity: 0;
+        filter: blur(18px) brightness(1.4);
+        mix-blend-mode: screen;
+        transform: translateY(-40px) scale(1.04);
+    }
+}
+
+/* One-hit form: the confirmation that takes its place. */
+.contact-sent {
+    align-items: flex-start;
+    gap: 12px;
+    animation: panelCondense 0.7s ease-out both;
+}
+@keyframes panelCondense {
+    0% {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(18px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+.contact-sent-mark {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(242, 143, 216, 0.5);
+    color: var(--pink-light);
+    font: 600 20px/1 var(--font-heading);
+    box-shadow: 0 0 22px rgba(217, 79, 174, 0.35);
+}
+.contact-sent-title {
+    margin: 4px 0 0;
+    font: 600 28px/1.1 var(--font-heading);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--pink);
+}
+.contact-sent-text {
+    margin: 0 0 8px;
+    max-width: 380px;
+    font: 400 15px/1.6 var(--font-body);
+    color: rgba(245, 238, 242, 0.75);
 }
 .contact-field {
     display: flex;
@@ -185,22 +381,54 @@
     overflow: visible;
 }
 .steam-puff {
+    --sx: 0px;
+    --dx: 0px;
+    --dy: -120px;
+    --rot: 0deg;
     position: absolute;
-    bottom: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(245, 238, 242, 0.35), transparent 70%);
-    filter: blur(6px);
-    transform: translate(-50%, 0) scale(0.7);
-    animation: steam 2s ease-out forwards;
+    bottom: -6px;
+    border-radius: 50% 50% 45% 55% / 60% 60% 40% 40%;
+    background: radial-gradient(
+        ellipse at 50% 60%,
+        rgba(250, 236, 246, 0.7),
+        rgba(247, 168, 224, 0.28) 45%,
+        transparent 72%
+    );
+    filter: blur(5px);
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.6);
+    animation: steamWisp 2.6s ease-out forwards;
 }
-@keyframes steam {
+.steam-puff-burst {
+    filter: blur(8px);
+    animation-name: steamBurst;
+}
+@keyframes steamWisp {
     0% {
-        transform: translate(-50%, 0) scale(0.7);
-        opacity: 1;
+        opacity: 0;
+        transform: translate(-50%, 0) rotate(0deg) scale(0.6);
+    }
+    18% {
+        opacity: 0.9;
+    }
+    50% {
+        transform: translate(calc(-50% + var(--sx)), calc(var(--dy) * 0.5)) rotate(var(--rot))
+            scale(1);
     }
     100% {
-        transform: translate(calc(-50% + var(--dx)), var(--dy)) scale(1.5);
         opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), var(--dy)) rotate(calc(var(--rot) * -1))
+            scale(1.4);
+    }
+}
+@keyframes steamBurst {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), var(--dy)) scale(2);
     }
 }
 
@@ -277,6 +505,9 @@
         transparent 75%
     );
     filter: blur(10px);
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
 }
 .burner-jets {
     position: relative;
@@ -310,8 +541,30 @@
 }
 .burner.is-whoosh .burner-jet {
     animation: none;
-    transform: scaleY(1.9);
-    filter: blur(0.4px) brightness(1.6);
+    transform: scaleY(2.2) skewX(0deg);
+    filter: blur(0.6px) brightness(1.7);
+    transition:
+        transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1.3),
+        filter 0.18s ease;
+}
+.burner.is-whoosh .burner-glow {
+    transform: translateX(-50%) scale(1.5, 1.8);
+    opacity: 1.6;
+}
+/* Gas off: flames snap down, then the burner fades. */
+.burner.is-cut {
+    transition: opacity 0.5s ease 0.18s;
+}
+.burner.is-cut .burner-jet {
+    animation: none;
+    transform: scaleY(0.04);
+    filter: blur(1px) brightness(0.8);
+    transition:
+        transform 0.22s cubic-bezier(0.6, 0, 0.9, 0.4),
+        filter 0.22s ease;
+}
+.burner.is-cut .burner-jets {
+    transition: none;
 }
 @keyframes jet {
     0% {
@@ -400,12 +653,11 @@
         padding: 13px 14px;
         font-size: 14px;
     }
+    .ghost-layer {
+        --ghost-scale: 0.8;
+    }
     .ghost-line {
         max-width: 480px;
-        font-size: 17px;
-    }
-    .ghost-line-big {
-        font-size: 34px;
     }
 }
 
@@ -436,12 +688,14 @@
         align-items: stretch;
         text-align: center;
     }
+    .ghost-layer {
+        --ghost-scale: 0.62;
+    }
     .ghost-line {
         max-width: 80vw;
-        font-size: 15px;
     }
-    .ghost-line-big {
-        font-size: 26px;
+    .ghost-line-launch {
+        animation-name: ghostLaunchNarrow;
     }
 }
 
@@ -457,11 +711,24 @@
         transition: none;
     }
     .ghost-ch.is-on,
+    .ghost-ch.is-off,
     .ghost-line-launch,
-    .steam-puff {
+    .ghost-line-reply,
+    .steam-puff,
+    .contact-panel.is-dissolving,
+    .contact-sent {
         animation: none;
     }
-    .magnet {
+    .burner.is-whoosh .burner-jet,
+    .burner.is-cut .burner-jet,
+    .burner.is-whoosh .burner-glow {
         transition: none;
+    }
+    .channel,
+    .channel-bar {
+        transition: none;
+    }
+    .channel:hover .channel-bar {
+        animation: none;
     }
 }
