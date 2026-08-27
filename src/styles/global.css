@@ -368,3 +368,15 @@ img {
         font-size: 11px;
     }
 }
+
+/* ---------- Particle field (Home, Contact) ---------- */
+.field-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+/* Films theatre mode: the field all but disappears behind the video. */
+.is-dim .field-layer {
+    opacity: 0.12;
+}

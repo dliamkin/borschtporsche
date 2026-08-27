@@ -3,6 +3,17 @@ import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
 import { LINKS } from "../data/links.js";
 import { submitContactMessage } from "../lib/contact.js";
+import ParticleField from "../components/ParticleField.jsx";
+import {
+    isSupported as synthSupported,
+    unlock,
+    noteForChar,
+    playNote,
+    playMelody,
+    playWhoosh,
+    playSpark,
+    playAtHeight,
+} from "../lib/synth.js";
 import "../styles/contact.css";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,23 +73,25 @@ const COMPLAINTS = [
     "My soup came out in 4/4. Yours is clearly in 7/8.",
 ];
 
+// Two brothers, two channels. Each reply is tagged M or D; a few keywords get
+// both of them, and they don't always agree.
 const KEYWORD_REPLIES = [
-    ["booking", "We’ll bring the soup."],
-    ["press", "No comment. Okay, one comment."],
-    ["recipe", "The salt is not missing. It’s a choice."],
-    ["chess", "The drummer accepts."],
-    ["film", "Cinemadrome remembers."],
-    ["borscht", "You rang?"],
-    ["wedding", "We play weddings and hauntings."],
-    ["synth", "Analog. Mostly. Don’t ask."],
-    ["brother", "Which one? The wrong one, probably."],
-    ["remix", "Send stems. We’ll bring dill."],
-    ["show", "The gymnasium is under consideration."],
-    ["vinyl", "There should be vinyl."],
-    ["gainesville", "We know. We live here."],
-    ["love", "Careful. We bruise like beets."],
-    ["soup", "Always."],
-    ["dill", "Finally, someone gets it."],
+    ["booking", ["D", "We’ll bring the soup."], ["M", "He means I’ll bring the soup."]],
+    ["press", ["M", "No comment. Okay, one comment."]],
+    ["recipe", ["D", "The salt is not missing. It’s a choice."], ["M", "It’s missing."]],
+    ["chess", ["D", "The drummer accepts."]],
+    ["film", ["M", "Cinemadrome remembers."]],
+    ["borscht", ["D", "You rang?"]],
+    ["wedding", ["M", "We play weddings and hauntings."]],
+    ["synth", ["D", "Analog. Mostly. Don’t ask."], ["M", "It’s a plugin."]],
+    ["brother", ["D", "Which one? The wrong one, probably."], ["M", "Hi."]],
+    ["remix", ["M", "Send stems. We’ll bring dill."]],
+    ["show", ["D", "The gymnasium is under consideration."]],
+    ["vinyl", ["M", "There should be vinyl."], ["D", "There will not be vinyl."]],
+    ["gainesville", ["D", "We know. We live here."]],
+    ["love", ["M", "Careful. We bruise like beets."]],
+    ["soup", ["D", "Always."]],
+    ["dill", ["M", "Finally, someone gets it."], ["D", "Too much."]],
 ];
 
 const SOURCES = [
@@ -112,7 +125,8 @@ const GHOST_DURATION = 5400;
 const GHOST_MAX_CADENCE = 115;
 
 const LAUNCH_HOLD = 120; // ms the launched message stays intact before dissolving
-const LAUNCH_STAGGER = 26; // ms between letters dissolving
+const LAUNCH_STAGGER = 26; // ms between letters dissolving (short messages)
+const LAUNCH_SPREAD = 1300; // ms cap on the whole stagger, so long messages don't linger
 const LAUNCH_LETTER = 1100; // ms one letter takes to dissolve
 const DISSOLVE_MS = 1000; // the form panel smoking away
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -124,7 +138,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function spawnGhost(
     layer,
     text,
-    { size, color, left, top, style, className = "", instant = false, auto = false }
+    { size, color, left, top, style, className = "", badge, instant = false, auto = false }
 ) {
     if (!layer) return;
     const max = instant ? 400 : 120;
@@ -138,6 +152,14 @@ function spawnGhost(
     if (style) Object.assign(line.style, style);
     if (color) line.style.color = color;
 
+    if (badge) {
+        // Channel tag (which brother is talking). Fades in and out with the
+        // letters instead of hanging around after them.
+        const b = document.createElement("span");
+        b.className = "ghost-ch ghost-badge is-on";
+        b.textContent = badge;
+        line.appendChild(b);
+    }
     const chars = Array.from(str);
     const spans = chars.map((ch) => {
         const s = document.createElement("span");
@@ -149,10 +171,11 @@ function spawnGhost(
     layer.appendChild(line);
 
     let delay = 0;
+    const stagger = Math.min(LAUNCH_STAGGER, LAUNCH_SPREAD / Math.max(1, chars.length));
     spans.forEach((s, i) => {
         if (instant) {
             // Whole line lifts off intact, then letters dissolve one after another.
-            s.style.animationDelay = `${LAUNCH_HOLD + i * LAUNCH_STAGGER}ms`;
+            s.style.animationDelay = `${LAUNCH_HOLD + i * stagger}ms`;
             s.classList.add("is-off");
         } else {
             delay += rand(45, GHOST_MAX_CADENCE);
@@ -160,9 +183,43 @@ function spawnGhost(
         }
     });
     const life = instant
-        ? LAUNCH_HOLD + chars.length * LAUNCH_STAGGER + LAUNCH_LETTER + 200
+        ? LAUNCH_HOLD + chars.length * stagger + LAUNCH_LETTER + 200
         : GHOST_DURATION + chars.length * GHOST_MAX_CADENCE;
     setTimeout(() => line.remove(), life);
+}
+
+// Estimate the box a line will occupy and pick a random spot (in % of the
+// layer) that doesn't overlap any ambient line already showing. Returns null
+// if nothing clear turns up after a few tries.
+function findGhostSpot(layer, text, size) {
+    const W = layer.clientWidth;
+    const H = layer.clientHeight;
+    if (!W || !H) return null;
+    const scale = parseFloat(getComputedStyle(layer).getPropertyValue("--ghost-scale")) || 1;
+    const px = size * scale;
+    const maxW = Math.min(W <= 700 ? W * 0.8 : W <= 1100 ? 480 : 620, W * 0.9);
+    const lineW = text.length * px * 0.58;
+    const boxW = Math.min(maxW, lineW);
+    const boxH = Math.ceil(lineW / maxW) * px * 1.2;
+    const margin = 28;
+    const taken = Array.from(layer.querySelectorAll("[data-auto]")).map((el) => {
+        const r = el.getBoundingClientRect();
+        const l = layer.getBoundingClientRect();
+        return { x: r.left - l.left, y: r.top - l.top, w: r.width, h: r.height };
+    });
+    for (let i = 0; i < 12; i++) {
+        const x = rand(0.03, 0.63) * W;
+        const y = rand(0.08, 0.86) * H;
+        const clear = taken.every(
+            (t) =>
+                x + boxW + margin < t.x ||
+                t.x + t.w + margin < x ||
+                y + boxH + margin < t.y ||
+                t.y + t.h + margin < y
+        );
+        if (clear) return { left: (x / W) * 100, top: (y / H) * 100 };
+    }
+    return null;
 }
 
 // Rect of `el` in the coordinate space of `page` (the ghost layers fill it).
@@ -218,6 +275,17 @@ export default function Contact() {
     const [whoosh, setWhoosh] = useState(false); // flames flare out on send
     const [cut, setCut] = useState(false); // ...then the gas is cut
     const [dissolving, setDissolving] = useState(false); // form smoking away after send
+    const [sound, setSound] = useState(false); // opt-in: typing plays notes
+    const [soundTip, setSoundTip] = useState(false); // callout: false | "in" | "out"
+    const soundTipTimer = useRef(null);
+    const typedRef = useRef(false); // has the visitor typed a message yet?
+
+    function hideSoundTip() {
+        clearTimeout(soundTipTimer.current);
+        setSoundTip((s) => (s === "in" ? "out" : s));
+        soundTipTimer.current = setTimeout(() => setSoundTip(false), 450);
+    }
+    const prevMessageRef = useRef("");
 
     const pageRef = useRef(null);
     const ghostRef = useRef(null); // behind the content: ambient inbox
@@ -239,13 +307,14 @@ export default function Contact() {
         if (source === "jokes") topUpJokes();
     }, [source]);
 
-    // Ghost engine: one line every ~2.4s, capped concurrency.
+    // Ghost engine: one line every ~3.2s, capped concurrency, and each new
+    // line is placed where it won't sit on top of one already on screen.
     useEffect(() => {
         if (reducedMotion.current) return undefined;
         const layer = ghostRef.current;
         const id = setInterval(() => {
             if (!layer) return;
-            const cap = window.innerWidth <= 700 ? 3 : 6;
+            const cap = window.innerWidth <= 700 ? 3 : 5;
             if (layer.querySelectorAll("[data-auto]").length >= cap) return;
 
             let text;
@@ -262,13 +331,10 @@ export default function Contact() {
             }
             // Long lines lean small so they wrap into a block rather than a wall.
             const size = text.length > 60 ? rand(20, 30) : rand(22, 46);
-            spawnGhost(layer, text, {
-                size,
-                left: rand(3, 63),
-                top: rand(8, 86),
-                auto: true,
-            });
-        }, 2400);
+            const spot = findGhostSpot(layer, text, size);
+            if (!spot) return; // nowhere clear this tick; try again next one
+            spawnGhost(layer, text, { size, left: spot.left, top: spot.top, auto: true });
+        }, 3200);
         return () => clearInterval(id);
     }, []);
 
@@ -282,7 +348,13 @@ export default function Contact() {
         return () => clearInterval(id);
     }, [cooking]);
 
-    useEffect(() => () => clearTimeout(idleTimer.current), []);
+    useEffect(
+        () => () => {
+            clearTimeout(idleTimer.current);
+            clearTimeout(soundTipTimer.current);
+        },
+        []
+    );
 
     function touchBurner() {
         setCooking(true);
@@ -297,19 +369,58 @@ export default function Contact() {
         setStatus((s) => (s === "error" ? "idle" : s));
         touchBurner();
         if (key === "message") {
+            // Your message is a melody: each new letter is a note.
+            const prev = prevMessageRef.current;
+            if (sound && value.length === prev.length + 1 && value.startsWith(prev)) {
+                const f = noteForChar(value[value.length - 1]);
+                if (f) playNote(f);
+            }
+            prevMessageRef.current = value;
+            if (value.trim()) {
+                typedRef.current = true;
+                if (soundTip === "in") hideSoundTip();
+            }
+
             const lower = value.toLowerCase();
-            for (const [word, reply] of KEYWORD_REPLIES) {
+            for (const [word, ...replies] of KEYWORD_REPLIES) {
                 if (!firedRef.current.has(word) && lower.includes(word)) {
                     firedRef.current.add(word);
-                    if (!reducedMotion.current) spawnReply(reply);
+                    if (!reducedMotion.current) {
+                        replies.forEach(([channel, text], i) => {
+                            setTimeout(() => spawnReply(text, channel), i * 900);
+                        });
+                    }
                 }
             }
         }
     };
 
+    async function toggleSound() {
+        if (sound) {
+            setSound(false);
+            hideSoundTip();
+            return;
+        }
+        const ok = await unlock();
+        setSound(ok);
+        if (!ok) return;
+        // Bounce attention from the button over to the message box - but only
+        // until they've typed something; after that they clearly know.
+        if (!typedRef.current) {
+            clearTimeout(soundTipTimer.current);
+            setSoundTip("in");
+            soundTipTimer.current = setTimeout(hideSoundTip, 4500);
+            textareaRef.current?.focus({ preventScroll: false });
+        }
+        const a = noteForChar("h");
+        const b = noteForChar("i");
+        if (a) playNote(a, { vel: 0.3 });
+        if (b) playNote(b, { at: 0.14, vel: 0.3 });
+    }
+
     // The form talks back: a reply floats up beside the message box (above the
     // form on narrow layouts), styled apart from the ambient inbox.
-    function spawnReply(reply) {
+    function spawnReply(reply, channel = "D") {
         const page = pageRef.current;
         const panel = panelRef.current;
         const box = textareaRef.current;
@@ -332,7 +443,8 @@ export default function Contact() {
                   textAlign: "right",
               };
         spawnGhost(frontRef.current, reply, {
-            className: `ghost-line-reply${narrow ? " ghost-line-reply-narrow" : ""}`,
+            className: `ghost-line-reply ghost-line-reply-${channel.toLowerCase()}${narrow ? " ghost-line-reply-narrow" : ""}`,
+            badge: channel,
             style,
         });
     }
@@ -376,6 +488,11 @@ export default function Contact() {
         // Order up: the message leaves the kitchen as a ghost, steam puffs up,
         // the flames whoosh out and then the gas is cut.
         const payload = { ...fields };
+        prevMessageRef.current = "";
+        if (sound) {
+            playWhoosh();
+            playMelody(payload.message);
+        }
         if (!reducedMotion.current) {
             launchMessage(payload.message);
             spawnSteam(steamRef.current, 7, true);
@@ -434,6 +551,10 @@ export default function Contact() {
     return (
         <div className="page contact-page" ref={pageRef}>
             <div className="contact-glow" aria-hidden="true" />
+            <ParticleField
+                onSpark={sound ? playSpark : null}
+                onDrag={sound ? playAtHeight : null}
+            />
             <div className="ghost-layer" ref={ghostRef} aria-hidden="true" />
             <div className="ghost-layer ghost-layer-front" ref={frontRef} aria-hidden="true" />
 
@@ -441,7 +562,10 @@ export default function Contact() {
             <main className="page-main contact-main">
                 <div className="contact-grid">
                     <div className="contact-intro">
-                        <h1 className="h1-gradient">Say hi</h1>
+                        <div className="contact-title-row">
+                            <h1 className="h1-gradient">Say hi</h1>
+                            {sound && <span className="click-hint">or just click anywhere</span>}
+                        </div>
                         <p className="page-intro">
                             Booking, press, recipe corrections, chess challenges. We read everything
                             - the messages drifting behind this page are proof.
@@ -477,6 +601,26 @@ export default function Contact() {
                     </div>
 
                     <div className="contact-stack">
+                        {synthSupported() && (
+                            <div className={`sound-cta${sound ? " is-on" : ""}`}>
+                                {!sound && (
+                                    <span className="sound-cta-label" aria-hidden="true">
+                                        try me ˅
+                                    </span>
+                                )}
+                                <button
+                                    type="button"
+                                    className="sound-btn"
+                                    aria-pressed={sound}
+                                    onClick={toggleSound}
+                                >
+                                    <span className="sound-btn-icon" aria-hidden="true">
+                                        {sound ? "♪" : "♩"}
+                                    </span>
+                                    {sound ? "Sound is on!" : "Sound is off"}
+                                </button>
+                            </div>
+                        )}
                         {status === "sent" ? (
                             <div
                                 className="contact-panel contact-sent"
@@ -537,6 +681,14 @@ export default function Contact() {
                                 <div className="contact-field">
                                     <label htmlFor="contact-message">Message</label>
                                     <div className="contact-textarea-wrap">
+                                        {soundTip && (
+                                            <div
+                                                className={`sound-tip${soundTip === "out" ? " is-out" : ""}`}
+                                                role="status"
+                                            >
+                                                Play your keyboard :)
+                                            </div>
+                                        )}
                                         <div
                                             className="steam-host"
                                             ref={steamRef}

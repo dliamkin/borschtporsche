@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
+import ParticleField from "../components/ParticleField.jsx";
 import "../styles/films.css";
 
 // Cinemadrome entries - first is the initially featured film.
@@ -144,6 +145,9 @@ export default function Films() {
                 <div className="films-backdrop-grad" />
                 <div className="films-backdrop-dim" />
             </div>
+
+            {/* Dims with the rest of the page in theatre mode - see global.css */}
+            <ParticleField />
 
             <div className="films-dimmable">
                 <Nav />

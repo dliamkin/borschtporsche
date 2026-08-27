@@ -1,6 +1,7 @@
 import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
 import AmbientLayers from "../components/AmbientLayers.jsx";
+import ParticleField from "../components/ParticleField.jsx";
 import { LINKS } from "../data/links.js";
 import "../styles/home.css";
 
@@ -10,6 +11,7 @@ export default function Home() {
             <div className="home-bg" />
             <div className="home-scrim" />
             <AmbientLayers />
+            <ParticleField />
 
             <div className="home-content">
                 <Nav />
