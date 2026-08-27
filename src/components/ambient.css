@@ -1,0 +1,256 @@
+.ambient {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.ambient-glow {
+    position: absolute;
+    left: 50%;
+    top: 54%;
+    width: 1000px;
+    height: 720px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(217, 79, 174, 0.26), transparent 65%);
+    animation: bpPulse 7s ease-in-out infinite;
+}
+
+.ambient-shard {
+    position: absolute;
+}
+.ambient-shard-1 {
+    left: 6%;
+    top: 58%;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, rgba(217, 79, 174, 0.2), rgba(247, 168, 224, 0.04));
+    clip-path: polygon(50% 0, 100% 100%, 0 78%);
+    filter: blur(1px);
+    animation: bpDrift 16s ease-in-out infinite alternate;
+}
+.ambient-shard-2 {
+    left: 14%;
+    top: 22%;
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, rgba(247, 168, 224, 0.18), rgba(142, 44, 98, 0.05));
+    clip-path: polygon(0 0, 100% 30%, 42% 100%);
+    filter: blur(1px);
+    animation: bpDrift 21s ease-in-out infinite alternate-reverse;
+}
+.ambient-shard-3 {
+    right: 9%;
+    top: 16%;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(217, 79, 174, 0.16), rgba(247, 168, 224, 0.04));
+    clip-path: polygon(50% 0, 100% 78%, 8% 100%);
+    filter: blur(1px);
+    animation: bpDrift 18s ease-in-out infinite alternate 2s;
+}
+.ambient-shard-4 {
+    right: 16%;
+    top: 66%;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(247, 168, 224, 0.22), rgba(142, 44, 98, 0.06));
+    clip-path: polygon(0 22%, 100% 0, 70% 100%);
+    animation: bpDrift 13s ease-in-out infinite alternate 1s;
+}
+.ambient-shard-5 {
+    left: 44%;
+    top: 8%;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(217, 79, 174, 0.18), rgba(247, 168, 224, 0.05));
+    clip-path: polygon(50% 0, 100% 100%, 0 78%);
+    animation: bpDrift 24s ease-in-out infinite alternate-reverse 3s;
+}
+.ambient-shard-6 {
+    left: 30%;
+    top: 74%;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(142, 44, 98, 0.2), rgba(247, 168, 224, 0.05));
+    clip-path: polygon(0 0, 100% 30%, 42% 100%);
+    filter: blur(2px);
+    animation: bpDrift 19s ease-in-out infinite alternate 4s;
+}
+
+.ambient-dot {
+    position: absolute;
+    border-radius: 50%;
+}
+.ambient-dot-1 {
+    left: 16%;
+    top: 24%;
+    width: 4px;
+    height: 4px;
+    background: #f7a8e0;
+    animation: bpTwinkle 4s ease-in-out infinite;
+}
+.ambient-dot-2 {
+    left: 24%;
+    top: 62%;
+    width: 3px;
+    height: 3px;
+    background: #f28fd8;
+    animation: bpTwinkle 5s ease-in-out infinite 1s;
+}
+.ambient-dot-3 {
+    left: 44%;
+    top: 14%;
+    width: 5px;
+    height: 5px;
+    background: #f7a8e0;
+    animation: bpTwinkle 6s ease-in-out infinite 2s;
+}
+.ambient-dot-4 {
+    right: 20%;
+    top: 30%;
+    width: 4px;
+    height: 4px;
+    background: #f28fd8;
+    animation: bpTwinkle 4.5s ease-in-out infinite 0.5s;
+}
+.ambient-dot-5 {
+    right: 30%;
+    top: 70%;
+    width: 3px;
+    height: 3px;
+    background: #f7a8e0;
+    animation: bpTwinkle 5.5s ease-in-out infinite 2.5s;
+}
+.ambient-dot-6 {
+    right: 8%;
+    top: 52%;
+    width: 4px;
+    height: 4px;
+    background: #f28fd8;
+    animation: bpTwinkle 3.5s ease-in-out infinite 1.5s;
+}
+.ambient-dot-7 {
+    left: 8%;
+    top: 44%;
+    width: 3px;
+    height: 3px;
+    background: #f7a8e0;
+    animation: bpTwinkle 6.5s ease-in-out infinite 3s;
+}
+
+.ambient-eq {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 64px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0.28;
+}
+.ambient-eq span {
+    width: 6px;
+    height: 56px;
+    transform-origin: bottom;
+}
+.ambient-eq span:nth-child(3n + 1) {
+    background: #d94fae;
+}
+.ambient-eq span:nth-child(3n + 2) {
+    background: #f28fd8;
+}
+.ambient-eq span:nth-child(3n) {
+    background: #f7a8e0;
+}
+.ambient-eq span:nth-child(1) {
+    animation: bpEq 1.1s ease-in-out infinite;
+}
+.ambient-eq span:nth-child(2) {
+    animation: bpEq 1.4s ease-in-out infinite 0.2s;
+}
+.ambient-eq span:nth-child(3) {
+    animation: bpEq 0.9s ease-in-out infinite 0.1s;
+}
+.ambient-eq span:nth-child(4) {
+    animation: bpEq 1.3s ease-in-out infinite 0.4s;
+}
+.ambient-eq span:nth-child(5) {
+    animation: bpEq 1s ease-in-out infinite 0.3s;
+}
+.ambient-eq span:nth-child(6) {
+    animation: bpEq 1.5s ease-in-out infinite 0.6s;
+}
+.ambient-eq span:nth-child(7) {
+    animation: bpEq 1.2s ease-in-out infinite 0.5s;
+}
+.ambient-eq span:nth-child(8) {
+    animation: bpEq 0.95s ease-in-out infinite 0.7s;
+}
+.ambient-eq span:nth-child(9) {
+    animation: bpEq 1.35s ease-in-out infinite 0.15s;
+}
+.ambient-eq span:nth-child(10) {
+    animation: bpEq 1.05s ease-in-out infinite 0.45s;
+}
+
+/* Tablet (mockup 6b): reduced counts, smaller glow, no equalizer */
+@media (max-width: 1100px) {
+    .ambient-glow {
+        left: 52%;
+        top: 40%;
+        width: 600px;
+        height: 460px;
+        background: radial-gradient(ellipse, rgba(217, 79, 174, 0.24), transparent 65%);
+    }
+    .ambient-shard-1 {
+        left: 5%;
+        top: 52%;
+        width: 90px;
+        height: 90px;
+    }
+    .ambient-shard-3 {
+        right: 7%;
+        top: 14%;
+        width: 70px;
+        height: 70px;
+    }
+    .ambient-shard-2,
+    .ambient-shard-4,
+    .ambient-shard-5,
+    .ambient-shard-6 {
+        display: none;
+    }
+    .ambient-dot-1 {
+        left: 12%;
+        top: 18%;
+    }
+    .ambient-dot-5 {
+        right: 16%;
+        top: 60%;
+    }
+    .ambient-dot-2,
+    .ambient-dot-3,
+    .ambient-dot-4,
+    .ambient-dot-6,
+    .ambient-dot-7 {
+        display: none;
+    }
+    .ambient-eq {
+        display: none;
+    }
+}
+
+/* Phone (mockup 6a): no ambient effects at all */
+@media (max-width: 700px) {
+    .ambient {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient,
+    .ambient * {
+        animation: none !important;
+    }
+}

@@ -1,0 +1,451 @@
+/* ---------- Contact — "The Séance Kitchen" (CONTACT_PAGE_UPDATE.md, mockup 10a) ---------- */
+.contact-page {
+    position: relative;
+    overflow: hidden;
+}
+.contact-page .nav,
+.contact-page .page-main,
+.contact-page .footer {
+    position: relative;
+    z-index: 1;
+}
+
+.contact-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 32% 45%, rgba(58, 16, 44, 0.4), transparent 70%);
+}
+
+/* ---------- Ghost inbox ---------- */
+.ghost-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.ghost-line {
+    position: absolute;
+    max-width: 620px;
+    font: italic 400 19px/1.5 var(--font-body);
+    color: rgba(245, 238, 242, 0.28);
+    white-space: pre-wrap;
+}
+.ghost-line-big {
+    font: 600 42px/1.2 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(242, 143, 216, 0.3);
+}
+.ghost-line-launch {
+    animation: ghostDrift 6.5s ease-out forwards;
+}
+.ghost-ch {
+    opacity: 0;
+}
+.ghost-ch.is-on {
+    animation: ghost 5.4s forwards;
+}
+@keyframes ghost {
+    0% {
+        opacity: 0;
+    }
+    12% {
+        opacity: 1;
+    }
+    55% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes ghostDrift {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-300px);
+    }
+}
+
+/* ---------- Layout ---------- */
+.contact-main {
+    display: flex;
+    align-items: center;
+}
+.contact-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 72px;
+    padding: 32px 128px 48px;
+}
+
+.contact-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.contact-intro .page-intro {
+    line-height: 1.65;
+    max-width: 460px;
+}
+
+/* ---------- Fridge magnets ---------- */
+.magnets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 12px;
+}
+.magnet {
+    display: inline-block;
+    font: 600 13px/1 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--page-black);
+    background: linear-gradient(135deg, #f28fd8, #d94fae);
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: transform 0.25s ease;
+}
+.magnet:hover {
+    color: var(--page-black);
+}
+
+/* ---------- Form panel ---------- */
+.contact-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.contact-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: rgba(12, 9, 11, 0.66);
+    border: 1px solid rgba(242, 143, 216, 0.2);
+    border-radius: 12px;
+    padding: 32px 34px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.contact-field label {
+    font: 500 12px/1 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245, 238, 242, 0.55);
+}
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    background: var(--card-black);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 4px;
+    padding: 14px 16px;
+    font: 400 15px/1 var(--font-body);
+    color: var(--text);
+    outline: none;
+}
+.contact-field textarea {
+    display: block;
+    line-height: 1.5;
+    resize: vertical;
+}
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+    color: rgba(245, 238, 242, 0.35);
+}
+.contact-field input:focus,
+.contact-field textarea:focus {
+    border-color: rgba(242, 143, 216, 0.5);
+}
+
+.contact-textarea-wrap {
+    position: relative;
+}
+.steam-host {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+.steam-puff {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245, 238, 242, 0.35), transparent 70%);
+    filter: blur(6px);
+    transform: translate(-50%, 0) scale(0.7);
+    animation: steam 2s ease-out forwards;
+}
+@keyframes steam {
+    0% {
+        transform: translate(-50%, 0) scale(0.7);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(-50% + var(--dx)), var(--dy)) scale(1.5);
+        opacity: 0;
+    }
+}
+
+.contact-error {
+    font: 400 12px/1.4 var(--font-body);
+    color: var(--pink-mid);
+}
+
+.contact-submit-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.contact-submit {
+    padding: 15px 30px;
+}
+.contact-submit:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+.contact-hint {
+    font: italic 400 12px/1.4 var(--font-body);
+    color: rgba(245, 238, 242, 0.4);
+}
+.contact-status {
+    font: 400 13px/1.5 var(--font-body);
+}
+.contact-status-err {
+    color: var(--pink-mid);
+}
+
+/* ---------- Gas burner ---------- */
+.burner {
+    position: relative;
+    align-self: center;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+}
+.burner.is-cooking {
+    opacity: 1;
+}
+.burner-glow {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    width: 210px;
+    height: 48px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+        ellipse at 50% 100%,
+        rgba(96, 110, 255, 0.3),
+        rgba(217, 79, 174, 0.14) 55%,
+        transparent 75%
+    );
+    filter: blur(10px);
+}
+.burner-jets {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 34px;
+    margin-bottom: -1px;
+    transform-origin: 50% 100%;
+    transition:
+        transform 0.45s ease,
+        filter 0.45s ease;
+}
+.burner-jet {
+    display: block;
+    width: 8px;
+    background: linear-gradient(
+        180deg,
+        rgba(247, 168, 224, 0.9) 0%,
+        rgba(217, 79, 174, 0.75) 30%,
+        rgba(110, 120, 255, 0.85) 65%,
+        rgba(72, 160, 255, 0.95) 100%
+    );
+    border-radius: 50% 50% 24% 24% / 78% 78% 22% 22%;
+    filter: blur(0.4px);
+    transform-origin: 50% 100%;
+    animation: jet 0.4s ease-in-out infinite alternate;
+    transition:
+        transform 0.65s ease,
+        filter 0.65s ease;
+}
+.burner.is-whoosh .burner-jet {
+    animation: none;
+    transform: scaleY(1.9);
+    filter: blur(0.4px) brightness(1.6);
+}
+@keyframes jet {
+    0% {
+        transform: scaleY(0.8) skewX(-1.5deg);
+    }
+    50% {
+        transform: scaleY(1.1) skewX(1deg);
+    }
+    100% {
+        transform: scaleY(0.86) skewX(-0.5deg);
+    }
+}
+.burner-ring {
+    position: relative;
+    width: 250px;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #2c242b, #0f0c0e);
+    border: 1px solid rgba(242, 143, 216, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.burner-stem {
+    width: 66px;
+    height: 7px;
+    margin-top: 3px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(180deg, #2c242b, #0f0c0e);
+    border: 1px solid rgba(242, 143, 216, 0.2);
+    border-top: 0;
+}
+.burner-caption {
+    margin-top: 8px;
+    font: italic 400 12px/1 var(--font-body);
+    color: rgba(242, 143, 216, 0.6);
+}
+
+/* ---------- "Tune the room" dial ---------- */
+.dial {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.dial-label {
+    font: 500 11px/1 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245, 238, 242, 0.45);
+    margin-right: 4px;
+}
+.dial-pill {
+    font: 500 12px/1 var(--font-heading);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--pink);
+    background: transparent;
+    border: 1px solid rgba(242, 143, 216, 0.35);
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+.dial-pill:hover {
+    border-color: rgba(242, 143, 216, 0.7);
+}
+.dial-pill.is-active {
+    color: var(--page-black);
+    background: var(--pink);
+    border-color: var(--pink);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+    .contact-grid {
+        gap: 40px;
+        padding: 24px 36px 40px;
+    }
+    .contact-panel {
+        padding: 26px 26px;
+        gap: 14px;
+    }
+    .contact-field input,
+    .contact-field textarea {
+        padding: 13px 14px;
+        font-size: 14px;
+    }
+    .ghost-line {
+        max-width: 480px;
+        font-size: 17px;
+    }
+    .ghost-line-big {
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 700px) {
+    .contact-main {
+        align-items: flex-start;
+    }
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 18px 20px 28px;
+    }
+    .contact-stack {
+        order: 1;
+    }
+    .contact-intro {
+        order: 2;
+        gap: 16px;
+    }
+    .contact-panel {
+        padding: 22px 20px;
+    }
+    .contact-submit {
+        width: 100%;
+    }
+    .contact-submit-row {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    .ghost-line {
+        max-width: 80vw;
+        font-size: 15px;
+    }
+    .ghost-line-big {
+        font-size: 26px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .burner {
+        opacity: 0.35;
+        transition: none;
+    }
+    .burner-jet {
+        animation: none;
+    }
+    .burner-jets {
+        transition: none;
+    }
+    .ghost-ch.is-on,
+    .ghost-line-launch,
+    .steam-puff {
+        animation: none;
+    }
+    .magnet {
+        transition: none;
+    }
+}

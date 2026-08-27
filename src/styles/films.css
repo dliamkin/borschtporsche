@@ -1,0 +1,281 @@
+/* ---------- Films — "Screening Room Deluxe" (FILMS_PAGE_UPDATE.md, mockup 8a) ---------- */
+.films-page {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Backdrop: featured film's thumbnail, scaled up + blurred, fading to page black */
+.films-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: min(100vh, 1000px);
+    overflow: hidden;
+    pointer-events: none;
+}
+.films-backdrop-img {
+    position: absolute;
+    inset: -40px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(28px) brightness(0.35) saturate(1.2);
+}
+.films-backdrop-grad {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(12, 9, 11, 0.55),
+        rgba(58, 16, 44, 0.45) 55%,
+        #0c090b 100%
+    );
+}
+.films-backdrop-dim {
+    position: absolute;
+    inset: 0;
+    background: var(--page-black);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+.is-dim .films-backdrop-dim {
+    opacity: 0.75;
+}
+
+/* Everything except the projector dims while the film plays */
+.films-dimmable {
+    transition: filter 0.8s ease;
+}
+.is-dim .films-dimmable {
+    filter: brightness(0.3) saturate(0.6);
+}
+
+.films-page .nav,
+.films-page .page-main,
+.films-page .footer {
+    position: relative;
+}
+
+/* Containment: centered content column with page gutters */
+.films-shell {
+    padding: 0 96px;
+}
+.films-col {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.films-header {
+    padding: 48px 0 8px;
+    max-width: 900px;
+}
+.films-header .h1-gradient {
+    margin-bottom: 14px;
+}
+.films-now {
+    margin-top: 16px;
+    font: 500 13px/1.4 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(242, 143, 216, 0.85);
+}
+
+/* Projector: sprocket strips framing the contained player */
+.projector {
+    margin-top: 28px;
+    border-radius: 6px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+.projector-sprocket {
+    height: 16px;
+    background: repeating-linear-gradient(
+        90deg,
+        #161014 0 26px,
+        rgba(242, 143, 216, 0.3) 26px 36px
+    );
+    border: 1px solid var(--hairline-strong);
+}
+.projector-sprocket-top {
+    border-radius: 6px 6px 0 0;
+    border-bottom: 0;
+}
+.projector-sprocket-bottom {
+    border-radius: 0 0 6px 6px;
+    border-top: 0;
+}
+.projector-screen {
+    position: relative;
+    padding-bottom: 56.25%;
+    background: #000;
+}
+.projector-screen iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Festival ticker — full viewport width, outside the contained column */
+.films-ticker {
+    position: relative;
+    margin: 24px 0 4px;
+    padding: 10px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    overflow: hidden;
+}
+.films-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 28s linear infinite;
+}
+.films-ticker-run {
+    display: flex;
+}
+.films-ticker-item {
+    white-space: nowrap;
+    font: 500 13px/1 var(--font-heading);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(242, 143, 216, 0.6);
+}
+.films-ticker-item::after {
+    content: "·";
+    margin: 0 16px;
+}
+/* Shift by exactly one run of items — must stay -100% / TICKER_REPEATS
+   (see Films.jsx) so the loop restart lands on an identical frame. */
+@keyframes ticker {
+    to {
+        transform: translateX(calc(-100% / 6));
+    }
+}
+
+/* Grid of thumbnail buttons */
+.films-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 24px 0 56px;
+}
+.film-tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--card-black);
+    cursor: pointer;
+    text-align: left;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        filter 0.6s ease;
+}
+.film-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+    border-color: rgba(242, 143, 216, 0.55);
+}
+/* Hovering a tile lights up only that tile */
+.is-dim .film-tile:hover {
+    filter: none;
+}
+.film-tile img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.film-tile-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(12, 9, 11, 0.85) 100%);
+}
+.film-tile-title {
+    position: absolute;
+    left: 14px;
+    right: 110px;
+    bottom: 12px;
+    font: 600 14px/1.25 var(--font-heading);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+}
+.film-tile-badge {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    font: 600 11px/1 var(--font-heading);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--page-black);
+    background: var(--pink);
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+@media (max-width: 1100px) {
+    .films-shell {
+        padding: 0 36px;
+    }
+    .films-header {
+        padding: 32px 0 4px;
+        max-width: 620px;
+    }
+    .films-header .h1-gradient {
+        margin-bottom: 10px;
+    }
+    .films-now {
+        font-size: 12px;
+    }
+    .projector {
+        margin-top: 22px;
+    }
+    .films-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 20px 0 36px;
+    }
+}
+
+@media (max-width: 700px) {
+    .films-shell {
+        padding: 0 20px;
+    }
+    .films-header {
+        padding: 18px 0 6px;
+    }
+    .films-header .h1-gradient {
+        margin-bottom: 8px;
+    }
+    .films-now {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+    }
+    .projector {
+        margin-top: 16px;
+    }
+    .films-ticker {
+        margin-top: 18px;
+    }
+    .films-ticker-track span {
+        font-size: 12px;
+    }
+    .films-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 16px 0 28px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .films-ticker-track {
+        animation: none;
+    }
+}

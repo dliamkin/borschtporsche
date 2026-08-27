@@ -1,0 +1,370 @@
+/* ---------- Design tokens ---------- */
+:root {
+    --page-black: #0c090b;
+    --card-black: #161014;
+    --stripe-a: #1d1419;
+    --stripe-b: #241a20;
+    --pink: #f28fd8;
+    --pink-mid: #d94fae;
+    --pink-light: #f7a8e0;
+    --pink-deep: #8e2c62;
+    --text: #f5eef2;
+    --hairline: rgba(242, 143, 216, 0.14);
+    --hairline-strong: rgba(242, 143, 216, 0.2);
+    --card-hairline: rgba(242, 143, 216, 0.18);
+    --font-heading: "Oswald", sans-serif;
+    --font-body: "Archivo", sans-serif;
+    --font-tagline: "Alumni Sans", sans-serif;
+    --placeholder-stripes: repeating-linear-gradient(
+        45deg,
+        #1d1419,
+        #1d1419 12px,
+        #241a20 12px,
+        #241a20 24px
+    );
+}
+
+/* ---------- Reset / base ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page-black);
+    color: var(--text);
+    font: 400 15px/1.6 var(--font-body);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ---------- Keyframes (exact, per handoff) ---------- */
+@keyframes bpDrift {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    100% {
+        transform: translate(46px, -70px) rotate(20deg);
+    }
+}
+@keyframes bpPulse {
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1.07);
+    }
+}
+@keyframes bpTwinkle {
+    0%,
+    100% {
+        opacity: 0.08;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+@keyframes bpEq {
+    0%,
+    100% {
+        transform: scaleY(0.25);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+/* ---------- Nav ---------- */
+.nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 64px 0;
+}
+
+.nav-wordmark {
+    font: 600 18px/1 var(--font-heading);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text);
+}
+
+.nav-links {
+    display: flex;
+    gap: 36px;
+    font: 500 14px/1 var(--font-heading);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+.nav-links a {
+    color: rgba(245, 238, 242, 0.7);
+}
+.nav-links a:hover {
+    color: var(--pink);
+}
+.nav-links a.active {
+    color: var(--pink);
+    border-bottom: 2px solid var(--pink-mid);
+    padding-bottom: 6px;
+}
+
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px 2px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+.nav-hamburger span {
+    width: 22px;
+    height: 2px;
+    background: var(--pink);
+}
+
+/* Phone drawer (not mocked — full-screen overlay, same link styling) */
+.nav-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(12, 9, 11, 0.98);
+    display: flex;
+    flex-direction: column;
+}
+.nav-drawer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+}
+.nav-drawer-close {
+    background: none;
+    border: 0;
+    color: var(--pink);
+    font: 300 34px/1 var(--font-heading);
+    padding: 0 2px;
+    cursor: pointer;
+}
+.nav-drawer-links {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 34px;
+    font: 500 18px/1 var(--font-heading);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+.nav-drawer-links a {
+    color: rgba(245, 238, 242, 0.7);
+}
+.nav-drawer-links a.active {
+    color: var(--pink);
+    border-bottom: 2px solid var(--pink-mid);
+    padding-bottom: 6px;
+}
+
+@media (max-width: 1100px) {
+    .nav {
+        padding: 20px 36px 0;
+    }
+    .nav-wordmark {
+        font-size: 17px;
+    }
+    .nav-links {
+        gap: 24px;
+        font-size: 13px;
+        letter-spacing: 2px;
+    }
+    .nav-links a.active {
+        padding-bottom: 5px;
+    }
+}
+
+@media (max-width: 700px) {
+    .nav {
+        padding: 16px 20px;
+    }
+    .nav-wordmark {
+        font-size: 16px;
+    }
+    .nav-links {
+        display: none;
+    }
+    .nav-hamburger {
+        display: flex;
+    }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 64px;
+    border-top: 1px solid var(--card-hairline);
+}
+.footer-copy {
+    font: 400 12px/1 var(--font-body);
+    color: rgba(245, 238, 242, 0.4);
+}
+.footer-links {
+    display: flex;
+    gap: 26px;
+    font: 500 12px/1 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.footer-links a {
+    color: rgba(242, 143, 216, 0.85);
+}
+.footer-links a:hover {
+    color: var(--pink);
+}
+
+@media (max-width: 1100px) {
+    .footer {
+        padding: 14px 36px;
+    }
+    .footer-copy {
+        font-size: 11px;
+    }
+    .footer-links {
+        gap: 20px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 700px) {
+    .footer {
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding: 16px 20px 20px;
+    }
+    .footer-links {
+        gap: 22px;
+        font-size: 12px;
+    }
+}
+
+/* ---------- Shared page primitives ---------- */
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--page-black);
+}
+.page-main {
+    flex: 1;
+}
+.page-wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.h1-gradient {
+    margin: 0;
+    font: 700 56px/1 var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(120deg, #d94fae, #f7a8e0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.page-intro {
+    margin: 0;
+    font: 400 16px/1.6 var(--font-body);
+    color: rgba(245, 238, 242, 0.6);
+}
+
+@media (max-width: 1100px) {
+    .h1-gradient {
+        font-size: 44px;
+    }
+    .page-intro {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 700px) {
+    .h1-gradient {
+        font-size: 36px;
+    }
+    .page-intro {
+        font-size: 14px;
+        line-height: 1.55;
+    }
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-block;
+    font: 600 14px/1 var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+.btn-primary {
+    color: var(--page-black);
+    background: var(--pink);
+    border: 0;
+    padding: 14px 26px;
+}
+.btn-primary:hover {
+    background: var(--pink-light);
+}
+.btn-secondary {
+    color: var(--pink);
+    background: none;
+    border: 1px solid rgba(242, 143, 216, 0.5);
+    padding: 13px 26px;
+}
+.btn-secondary:hover {
+    color: var(--pink-light);
+    border-color: rgba(242, 143, 216, 0.8);
+}
+
+/* ---------- Recipe photo placeholder ---------- */
+.photo-placeholder {
+    background: var(--placeholder-stripes);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.photo-placeholder span {
+    font:
+        400 12px/1 ui-monospace,
+        Menlo,
+        monospace;
+    color: rgba(242, 143, 216, 0.55);
+}
+
+@media (max-width: 1100px) {
+    .photo-placeholder span {
+        font-size: 11px;
+    }
+}
