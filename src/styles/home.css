@@ -150,6 +150,33 @@
     text-align: center;
 }
 
+/* ---------- Mid-width: three columns don't fit until ~1515px ---------- */
+@media (max-width: 1515px) {
+    /* Album embed full width on top, two cards side by side below */
+    .home-release-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: stretch;
+        padding: 20px 36px 28px;
+    }
+    .home-album {
+        grid-column: 1 / -1;
+        order: 0;
+    }
+    .home-album-label {
+        display: none;
+    }
+    .home-album iframe {
+        height: 380px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    .release-card {
+        height: auto;
+        gap: 10px;
+        padding: 16px;
+    }
+}
+
 /* ---------- Tablet ---------- */
 @media (max-width: 1100px) {
     .home-scrim {
@@ -185,29 +212,6 @@
         padding: 12px 22px;
     }
 
-    /* Album embed full width on top, two cards side by side below */
-    .home-release-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        align-items: stretch;
-        padding: 20px 36px 28px;
-    }
-    .home-album {
-        grid-column: 1 / -1;
-        order: 0;
-    }
-    .home-album-label {
-        display: none;
-    }
-    .home-album iframe {
-        height: 380px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-    .release-card {
-        height: auto;
-        gap: 10px;
-        padding: 16px;
-    }
     .release-label {
         font-size: 11px;
     }
