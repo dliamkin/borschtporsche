@@ -2,6 +2,7 @@ import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
 import AmbientLayers from "../components/AmbientLayers.jsx";
 import ParticleField from "../components/ParticleField.jsx";
+import SpotifyEmbed from "../components/SpotifyEmbed.jsx";
 import { LINKS } from "../data/links.js";
 import "../styles/home.css";
 
@@ -50,25 +51,22 @@ export default function Home() {
                             src="/assets/single_redii.jpg"
                             alt="Single feat. REDII"
                         />
-                        <iframe
+                        <SpotifyEmbed
                             src={LINKS.spotifyTrackEmbed}
                             title="Featuring REDII on Spotify"
                             height="80"
-                            frameBorder="0"
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                            loading="lazy"
+                            loading="eager"
+                            compact
                         />
                     </div>
 
                     <div className="home-album">
                         <div className="release-label home-album-label">The album</div>
-                        <iframe
+                        <SpotifyEmbed
                             src={LINKS.spotifyAlbumEmbed}
                             title="Borscht Porsche album on Spotify"
                             height="410"
-                            frameBorder="0"
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                            loading="lazy"
+                            loading="eager"
                         />
                     </div>
 
