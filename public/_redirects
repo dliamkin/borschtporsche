@@ -1,3 +1,0 @@
-# Cloudflare Pages: serve the SPA shell for every path so react-router
-# handles deep links and hard refreshes (e.g. /contact) instead of a 404.
-/*    /index.html   200
