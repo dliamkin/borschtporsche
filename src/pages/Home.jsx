@@ -80,7 +80,7 @@ export default function Home() {
                             src="/assets/next_album_white.png"
                             alt="Next album"
                         />
-                        <div className="card-next-caption">No link yet — check back soon.</div>
+                        <div className="card-next-caption">No link yet - check back soon.</div>
                     </div>
                 </div>
 

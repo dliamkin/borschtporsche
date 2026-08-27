@@ -1,0 +1,23 @@
+# Normalize line endings.
+#
+# Everything Git detects as text is stored with LF in the repository and
+# checked out with LF on every platform. This matches .editorconfig
+# (end_of_line = lf) and Prettier's default, and stops Windows checkouts
+# from producing whole-file diffs on untouched files.
+* text=auto eol=lf
+
+# Binary assets: never diff, never convert line endings.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.mp3  binary
+*.mp4  binary
+*.woff  binary
+*.woff2 binary
+
+# Lockfile: machine-generated. Keep it out of GitHub's language stats and
+# collapse it by default in pull request diffs.
+package-lock.json linguist-generated=true

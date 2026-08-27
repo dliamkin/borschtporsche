@@ -7,7 +7,7 @@ import "../styles/contact.css";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// ---------- Ghost inbox sources (CONTACT_PAGE_UPDATE.md, Feature 2) ----------
+// ---------- Ghost inbox sources ----------
 const FAN_MAIL = [
     "Is the Porsche real?",
     "Saw you at the Hardback. Still thinking about the trumpet part.",
@@ -223,7 +223,7 @@ export default function Contact() {
         return () => clearInterval(id);
     }, []);
 
-    // Steam wisps while cooking.
+    // Steam wisps while cooking (mmmmmm, borscht).
     useEffect(() => {
         if (!cooking || reducedMotion.current) return undefined;
         const id = setInterval(() => spawnSteam(steamRef.current), 900);
@@ -332,7 +332,7 @@ export default function Contact() {
                         <h1 className="h1-gradient">Say hi</h1>
                         <p className="page-intro">
                             Booking, press, recipe corrections, chess challenges. We read everything
-                            — the ghosts behind this page are proof.
+                            - the ghosts behind this page are proof.
                         </p>
                         <div className="magnets">
                             {magnetLinks.map(([label, href], i) => (
@@ -407,13 +407,13 @@ export default function Contact() {
                                     {buttonLabel}
                                 </button>
                                 <span className="contact-hint">
-                                    psst — try typing "booking" or "borscht"
+                                    psst - try typing "booking" or "borscht"
                                 </span>
                             </div>
 
                             {status === "error" && (
                                 <div className="contact-status contact-status-err">
-                                    Something went wrong — try again in a minute.
+                                    Something went wrong - try again in a minute.
                                 </div>
                             )}
                         </form>

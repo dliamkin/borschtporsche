@@ -140,7 +140,7 @@ img {
     background: var(--pink);
 }
 
-/* Phone drawer (not mocked — full-screen overlay, same link styling) */
+/* Phone drawer (not mocked - full-screen overlay, same link styling) */
 .nav-drawer {
     position: fixed;
     inset: 0;

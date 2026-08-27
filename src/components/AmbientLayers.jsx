@@ -1,9 +1,9 @@
 import "./ambient.css";
 
-// Ambient background animation layers for the Home page (mockup 4a):
+// Ambient background animation layers for the Home page:
 // pulsing glow, drifting low-poly shards, twinkling dust, equalizer bars.
-// Hidden below 700px and reduced below 1100px (mockups 6a/6b); all
-// animations stop under prefers-reduced-motion — see ambient.css.
+// Hidden below 700px and reduced below 1100px; all
+// animations stop under prefers-reduced-motion - see ambient.css.
 export default function AmbientLayers() {
     return (
         <div className="ambient" aria-hidden="true">

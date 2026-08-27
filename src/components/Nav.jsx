@@ -3,7 +3,8 @@ import { Link, NavLink } from "react-router-dom";
 
 const NAV_ITEMS = [
     { to: "/", label: "Home" },
-    { to: "/recipes", label: "Recipes" },
+    // TODO: Re-enable recipes when we have more than one recipe. For now, the recipes page is just a placeholder.
+    // { to: "/recipes", label: "Recipes" },
     { to: "/films", label: "Films" },
     { to: "/contact", label: "Contact" },
 ];

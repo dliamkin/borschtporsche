@@ -1,4 +1,4 @@
-/* ---------- Films — "Screening Room Deluxe" (FILMS_PAGE_UPDATE.md, mockup 8a) ---------- */
+/* ---------- Films ---------- */
 .films-page {
     position: relative;
     overflow: hidden;
@@ -117,7 +117,7 @@
     border: 0;
 }
 
-/* Festival ticker — full viewport width, outside the contained column */
+/* Festival ticker - full viewport width, outside the contained column */
 .films-ticker {
     position: relative;
     margin: 24px 0 4px;
@@ -145,7 +145,7 @@
     content: "·";
     margin: 0 16px;
 }
-/* Shift by exactly one run of items — must stay -100% / TICKER_REPEATS
+/* Shift by exactly one run of items - must stay -100% / TICKER_REPEATS
    (see Films.jsx) so the loop restart lands on an identical frame. */
 @keyframes ticker {
     to {

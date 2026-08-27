@@ -3,7 +3,7 @@ import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
 import "../styles/films.css";
 
-// Cinemadrome entries — first is the initially featured film (FILMS_PAGE_UPDATE.md).
+// Cinemadrome entries - first is the initially featured film.
 const FILM_IDS = [
     "1ZI7aymSjnQ",
     "c-VimQslsNs",
@@ -27,7 +27,7 @@ const TICKER_ITEMS = [
 ];
 
 // How many times the item run is repeated in the track. The CSS keyframe
-// shifts by exactly one run (-100% / TICKER_REPEATS), so these must match —
+// shifts by exactly one run (-100% / TICKER_REPEATS), so these must match -
 // see @keyframes ticker in films.css.
 const TICKER_REPEATS = 6;
 
@@ -86,6 +86,7 @@ export default function Films() {
     }, []);
 
     // Featured player via the YouTube IFrame API; dim the lights while playing.
+    // Gives the page a "screening room" feel, and avoids the YouTube player controls from
     useEffect(() => {
         let cancelled = false;
         const wrapper = playerHostRef.current;
@@ -115,7 +116,7 @@ export default function Films() {
         };
     }, []);
 
-    // "Screen it": swap the tile's film into the projector (autoplays — this is
+    // "Screen it": swap the tile's film into the projector (autoplays - this is
     // always a user pick), return the old featured to the grid, lights back up
     // until the new video reports playing.
     function screenIt(id) {
@@ -155,7 +156,7 @@ export default function Films() {
                             <h1 className="h1-gradient">Films</h1>
                             <p className="page-intro">
                                 Our entries from Cinemadrome, Gainesville's local film competition.
-                                Made fast, scored by us, judged by strangers.
+                                Made fast, directed and scored by us, judged by the audience.
                             </p>
                             <div className="films-now">Now screening · {featuredTitle}</div>
                         </header>

@@ -1,4 +1,4 @@
-/* ---------- Home (mockup 4a desktop, 6b tablet, 6a phone) ---------- */
+/* ---------- Home ---------- */
 .home {
     position: relative;
     min-height: 100vh;
@@ -10,7 +10,7 @@
 .home-bg {
     position: fixed;
     inset: 0;
-    background: url("/assets/home_page_background_square2.jpg") no-repeat center 38%;
+    background: url("/assets/home_page_background_square.jpg") no-repeat center 38%;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -150,7 +150,7 @@
     text-align: center;
 }
 
-/* ---------- Tablet (6b) ---------- */
+/* ---------- Tablet ---------- */
 @media (max-width: 1100px) {
     .home-scrim {
         background: linear-gradient(
@@ -225,7 +225,7 @@
     }
 }
 
-/* ---------- Phone (6a) ---------- */
+/* ---------- Phone ---------- */
 @media (max-width: 700px) {
     .home-scrim {
         background: linear-gradient(

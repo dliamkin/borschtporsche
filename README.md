@@ -1,4 +1,4 @@
-# Borscht Porsche — Band Website
+# Borscht Porsche - Band Website
 
 Marketing/fan site for the band Borscht Porsche, built with Vite + React (JavaScript, plain CSS). Five pages: Home, Recipes, Recipe Detail, Films, Contact.
 
@@ -34,10 +34,10 @@ public/assets/        Images and icons served at /assets/...
 
 ## Content and configuration
 
-- **Recipes** — edit [src/data/recipes.js](src/data/recipes.js). Each entry: `{ slug, title, summary, prep, cook, serves, ingredients[], steps[] }`.
-- **Films** — YouTube IDs live in [src/pages/Films.jsx](src/pages/Films.jsx); the first ID is the featured film.
-- **Links** — Spotify / Apple Music / YouTube / Instagram URLs in [src/data/links.js](src/data/links.js).
-- **Contact form** — [src/lib/contact.js](src/lib/contact.js) simulates a send until `CONTACT_ENDPOINT` is set to a form service's POST URL (Formspree, Web3Forms, Basin, etc.). Form data is posted as JSON `{ name, email, message }`.
+- **Recipes** - edit [src/data/recipes.js](src/data/recipes.js). Each entry: `{ slug, title, summary, prep, cook, serves, ingredients[], steps[] }`.
+- **Films** - YouTube IDs live in [src/pages/Films.jsx](src/pages/Films.jsx); the first ID is the featured film.
+- **Links** - Spotify / Apple Music / YouTube / Instagram URLs in [src/data/links.js](src/data/links.js).
+- **Contact form** - [src/lib/contact.js](src/lib/contact.js) simulates a send until `CONTACT_ENDPOINT` is set to a form service's POST URL (Formspree, Web3Forms, Basin, etc.). Form data is posted as JSON `{ name, email, message }`.
 
 ## Design notes
 

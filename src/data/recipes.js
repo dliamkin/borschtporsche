@@ -1,5 +1,5 @@
 // Recipe content driving /recipes and /recipes/:slug.
-// Photos are striped placeholders until real photography arrives —
+// Photos are striped placeholders until real photos are uploaded -
 // `photoCaption` / `detailPhotoCaption` label the placeholder areas.
 export const recipes = [
     {
@@ -8,7 +8,7 @@ export const recipes = [
         summary:
             "The namesake. Deep-red beet soup, slow-simmered, served with a spoon of smetana and total silence at the table.",
         description:
-            "The soup the band is named after. Beets, cabbage, and patience. Tastes better the next day — like most things.",
+            "The soup the band is named after. Beets, cabbage, and patience. Tastes better the next day - like most things.",
         photoCaption: "photo: mom's borscht",
         detailPhotoCaption: "photo: finished borscht, overhead",
         prep: "Prep 30 min",
@@ -29,7 +29,7 @@ export const recipes = [
             "Sauté onion and carrot in a large pot until soft. Add grated beets and tomato paste; cook 8–10 minutes until deep red.",
             "Pour in broth, add potatoes and bay leaves. Simmer 20 minutes until potatoes are nearly tender.",
             "Add cabbage and simmer another 15 minutes. Season with salt and pepper. Taste. Adjust. Taste again.",
-            "Rest off the heat 20 minutes (or overnight — correct answer). Serve with dill and a spoon of smetana.",
+            "Rest off the heat 20 minutes (or overnight - correct answer). Serve with dill and a spoon of smetana.",
         ],
     },
     {
@@ -93,9 +93,9 @@ export const recipes = [
         slug: "olivyea",
         title: "Olivyea",
         summary:
-            "The New Year's salad. Potatoes, peas, pickles, mayonnaise — precision knife work required.",
+            "The New Year's salad. Potatoes, peas, pickles, mayonnaise - precision knife work required.",
         description:
-            "The New Year's table centerpiece. Everything diced to the same tiny cube — the knife work is the recipe.",
+            "The New Year's table centerpiece. Everything diced to the same tiny cube - the knife work is the recipe.",
         photoCaption: "photo: olivyea",
         detailPhotoCaption: "photo: olivyea, serving bowl",
         prep: "Prep 45 min",
@@ -114,7 +114,7 @@ export const recipes = [
         steps: [
             "Boil the potatoes and carrots until just tender; cool completely. Hard-boil the eggs.",
             "Peel everything. Dice potatoes, carrots, eggs, pickles, and bologna into identical small cubes. Identical.",
-            "Fold in the peas and onion, then dress with mayonnaise until just bound — not drowned.",
+            "Fold in the peas and onion, then dress with mayonnaise until just bound - not drowned.",
             "Season, chill at least an hour, and top with dill. Serve at midnight or whenever it is midnight somewhere.",
         ],
     },

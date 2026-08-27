@@ -194,7 +194,7 @@
     animation: bpEq 1.05s ease-in-out infinite 0.45s;
 }
 
-/* Tablet (mockup 6b): reduced counts, smaller glow, no equalizer */
+/* Tablet - reduced counts, smaller glow, no equalizer */
 @media (max-width: 1100px) {
     .ambient-glow {
         left: 52%;
@@ -241,7 +241,7 @@
     }
 }
 
-/* Phone (mockup 6a): no ambient effects at all */
+/* Phone - no ambient effects at all */
 @media (max-width: 700px) {
     .ambient {
         display: none;
