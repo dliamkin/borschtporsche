@@ -1,0 +1,8 @@
+# Cloudflare Pages security headers.
+# No strict CSP yet - the Spotify embed and Web3Forms POST would need
+# explicit allowlisting; add one deliberately later if wanted.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
