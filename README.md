@@ -27,7 +27,7 @@ src/
   data/
     links.js          Streaming / social URLs
     recipes.js        Recipe content driving Recipes + Recipe Detail
-  lib/contact.js      Contact form submit (stubbed, see below)
+  lib/contact.js      Contact form submit via Web3Forms (see below)
   styles/             global.css + one stylesheet per page
 public/assets/        Images and icons served at /assets/...
 ```
@@ -37,7 +37,7 @@ public/assets/        Images and icons served at /assets/...
 - **Recipes** - edit [src/data/recipes.js](src/data/recipes.js). Each entry: `{ slug, title, summary, prep, cook, serves, ingredients[], steps[] }`.
 - **Films** - YouTube IDs live in [src/pages/Films.jsx](src/pages/Films.jsx); the first ID is the featured film.
 - **Links** - Spotify / Apple Music / YouTube / Instagram URLs in [src/data/links.js](src/data/links.js).
-- **Contact form** - posts to [Web3Forms](https://web3forms.com) from [src/lib/contact.js](src/lib/contact.js). Copy `.env.example` to `.env` and set `VITE_WEB3FORMS_KEY` to the account's access key; messages arrive at the email registered with that key. Without a key the send is simulated in dev (with a console warning) and throws in a production build. Set the same variable in the host's environment settings so deploys pick it up - Vite inlines `VITE_*` at build time, so a rebuild is needed after changing it. The key is public by design: it only authorizes posting to that inbox. Spam is filtered by a hidden honeypot field plus Web3Forms' own checks.
+- **Contact form** - posts to [Web3Forms](https://web3forms.com) from [src/lib/contact.js](src/lib/contact.js). Copy `.env.example` to `.env` and set `VITE_WEB3FORMS_KEY` to the account's access key; messages arrive at the email registered with that key. Without a key the send is simulated in dev (with a console warning) and throws in a production build. For production, set it in the Cloudflare dashboard under **Settings → Build → "Build variables and secrets"** - _not_ Settings → Variables & Secrets, which holds runtime bindings for a Worker script and is never visible to Vite. `VITE_*` values are inlined at build time, so the key must be present while `npm run build` runs, and build-setting changes only take effect on the **next** build (retrying a failed deployment reuses the old config - push a commit instead). The key is public by design: it only authorizes posting to that inbox. Spam is filtered by a hidden honeypot field plus Web3Forms' own checks.
 
 ## Design notes
 
