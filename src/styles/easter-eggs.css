@@ -141,3 +141,197 @@ body.beet-mode .home-scrim {
         display: inline;
     }
 }
+
+/* ---------- Beet Mode: the chaos ---------- */
+
+/* 3. The hero photo goes beet-toned (the biggest thing on the page). */
+.home-bg {
+    transition: filter 1.2s ease;
+}
+body.beet-mode .home-bg {
+    filter: hue-rotate(-32deg) saturate(1.6) contrast(1.15);
+}
+/* Particle canvas is hard-coded pink; nudge it too. */
+body.beet-mode .field-layer {
+    filter: hue-rotate(-30deg) saturate(1.3);
+}
+
+/* 1. Arrival splat: a beet-red wash expands from the logo and dissolves. */
+.beet-splat {
+    position: fixed;
+    inset: 0;
+    z-index: 58; /* under the nav (60), over everything else */
+    pointer-events: none;
+    background: radial-gradient(
+        circle at var(--x) var(--y),
+        #ff4d7a 0%,
+        #b8123d 22%,
+        #6b0d29 48%,
+        rgba(107, 13, 41, 0.6) 70%
+    );
+    mix-blend-mode: hard-light;
+    animation: bpSplat 1.15s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes bpSplat {
+    0% {
+        clip-path: circle(0 at var(--x) var(--y));
+        opacity: 1;
+    }
+    55% {
+        opacity: 0.95;
+    }
+    100% {
+        clip-path: circle(160vmax at var(--x) var(--y));
+        opacity: 0;
+    }
+}
+
+/* 2. Screen shake, timed with the horn. */
+.home-content.is-shaking {
+    animation: bpShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes bpShake {
+    10%,
+    90% {
+        transform: translate(-2px, 1px);
+    }
+    20%,
+    80% {
+        transform: translate(4px, -2px);
+    }
+    30%,
+    50%,
+    70% {
+        transform: translate(-7px, 3px) rotate(-0.4deg);
+    }
+    40%,
+    60% {
+        transform: translate(7px, -3px) rotate(0.4deg);
+    }
+}
+
+/* 4. Beet rain. Two animations per drop: the fall and a side-to-side sway. */
+.beet-rain {
+    position: fixed;
+    inset: 0;
+    z-index: 45; /* over content, under the phone drawer (50) and nav (60) */
+    pointer-events: none;
+    overflow: hidden;
+}
+.beet-drop {
+    position: absolute;
+    top: -80px;
+    opacity: 0;
+    animation:
+        bpFall linear infinite,
+        bpSway ease-in-out infinite alternate;
+    will-change: transform;
+}
+.beet-drop svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45));
+}
+.beet-root {
+    fill: var(--pink-mid);
+}
+.beet-leaf {
+    fill: #7a2d4a;
+}
+.beet-ring {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.28);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+}
+@keyframes bpFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    8% {
+        opacity: 0.55;
+    }
+    92% {
+        opacity: 0.55;
+    }
+    100% {
+        transform: translateY(115vh) rotate(var(--spin));
+        opacity: 0;
+    }
+}
+@keyframes bpSway {
+    from {
+        margin-left: calc(var(--sway) * -1);
+    }
+    to {
+        margin-left: var(--sway);
+    }
+}
+
+/* 6. The wordmark drips. */
+body.beet-mode .nav-wordmark {
+    position: relative;
+}
+body.beet-mode .nav-wordmark::after {
+    content: "";
+    position: absolute;
+    left: 58%;
+    top: 100%;
+    width: 3px;
+    height: 0;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(var(--pink-mid), var(--pink-deep));
+    animation: bpDrip 4.5s ease-in infinite;
+}
+@keyframes bpDrip {
+    0% {
+        height: 0;
+        opacity: 1;
+    }
+    70% {
+        height: 12px;
+        opacity: 1;
+    }
+    85% {
+        height: 12px;
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    100% {
+        height: 0;
+        opacity: 0;
+    }
+}
+
+/* 7. Everything is slightly off-level. */
+.home-hero,
+.release-card,
+.home-album {
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+body.beet-mode .home-hero {
+    transform: rotate(-0.5deg);
+}
+body.beet-mode .card-single {
+    transform: rotate(-0.8deg);
+}
+body.beet-mode .home-album {
+    transform: rotate(0.5deg);
+}
+body.beet-mode .card-next {
+    transform: rotate(0.9deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .beet-splat,
+    .home-content.is-shaking,
+    .beet-drop,
+    body.beet-mode .nav-wordmark::after {
+        animation: none;
+    }
+    .beet-rain {
+        display: none;
+    }
+}

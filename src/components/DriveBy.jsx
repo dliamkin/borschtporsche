@@ -7,6 +7,7 @@ import { unlock, playHonk } from "../lib/synth.js";
 const DEFAULT_DELAY_MS = 90_000;
 const STORAGE_KEY = "bp-driveby-done";
 const DELAY_KEY = "bp-driveby-delay"; // set in sessionStorage to test without waiting
+export const TRIGGER_EVENT = "bp:driveby"; // dispatch on window to summon the car now
 
 const alreadyDone = () => {
     try {
@@ -35,10 +36,19 @@ export default function DriveBy() {
     const laneRef = useRef(null);
 
     useEffect(() => {
-        if (alreadyDone()) return undefined;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-        const t = setTimeout(() => setPhase("driving"), delayMs());
-        return () => clearTimeout(t);
+
+        // Anything on the page can summon the car (Beet Mode does) - this ignores
+        // the once-per-session flag, but won't interrupt a drive already underway.
+        const onSummon = () =>
+            setPhase((p) => (p === "driving" || p === "fleeing" ? p : "driving"));
+        window.addEventListener(TRIGGER_EVENT, onSummon);
+
+        const t = alreadyDone() ? null : setTimeout(() => setPhase("driving"), delayMs());
+        return () => {
+            window.removeEventListener(TRIGGER_EVENT, onSummon);
+            if (t) clearTimeout(t);
+        };
     }, []);
 
     const finish = () => {

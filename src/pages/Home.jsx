@@ -5,13 +5,39 @@ import ParticleField from "../components/ParticleField.jsx";
 import SpotifyEmbed from "../components/SpotifyEmbed.jsx";
 import BrotherCounter from "../components/BrotherCounter.jsx";
 import DriveBy from "../components/DriveBy.jsx";
+import BeetRain from "../components/BeetRain.jsx";
 import useBeetMode from "../lib/useBeetMode.js";
 import { LINKS } from "../data/links.js";
 import "../styles/home.css";
 import "../styles/easter-eggs.css";
 
+// Copy for the two states of the page. Beet Mode rewrites the menu.
+const COPY = {
+    tagline3: " · next album simmering",
+    spotify: "Listen on Spotify",
+    apple: "Apple Music",
+    single: "New single · feat. REDII",
+    album: "The album",
+    next: "Next album",
+    badge: "In the works",
+    caption: "No link yet - check back soon.",
+    noun: "brothers",
+};
+const BEET_COPY = {
+    tagline3: " · beets simmering",
+    spotify: "Listen on Beetify",
+    apple: "Apple Borscht",
+    single: "New single · feat. REDDII",
+    album: "The soup",
+    next: "Next batch",
+    badge: "In the pot",
+    caption: "No ladle yet - check back soon.",
+    noun: "beets",
+};
+
 export default function Home() {
-    const { beet, wobbling, onLogoTap } = useBeetMode();
+    const { beet, wobbling, shaking, burst, clearBurst, onLogoTap } = useBeetMode();
+    const t = beet ? BEET_COPY : COPY;
 
     return (
         <div className="home">
@@ -19,8 +45,18 @@ export default function Home() {
             <div className="home-scrim" />
             <AmbientLayers />
             <ParticleField />
+            {beet && <BeetRain />}
+            {burst && (
+                <div
+                    key={burst.id}
+                    className="beet-splat"
+                    style={{ "--x": `${burst.x}px`, "--y": `${burst.y}px` }}
+                    onAnimationEnd={clearBurst}
+                    aria-hidden="true"
+                />
+            )}
 
-            <div className="home-content">
+            <div className={`home-content${shaking ? " is-shaking" : ""}`}>
                 <Nav />
 
                 <div className="home-hero">
@@ -33,9 +69,7 @@ export default function Home() {
                     />
                     <div className="home-tagline">
                         Debut album out now · new single with REDII
-                        <span className="home-tagline-seg3">
-                            {beet ? " · beets simmering" : " · next album simmering"}
-                        </span>
+                        <span className="home-tagline-seg3">{t.tagline3}</span>
                     </div>
                     <div className="home-cta">
                         <a
@@ -44,7 +78,7 @@ export default function Home() {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            Listen on Spotify
+                            {t.spotify}
                         </a>
                         <a
                             className="btn btn-secondary"
@@ -52,14 +86,14 @@ export default function Home() {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            Apple Music
+                            {t.apple}
                         </a>
                     </div>
                 </div>
 
                 <div className="home-release-row">
                     <div className="release-card card-single">
-                        <div className="release-label">New single · feat. REDII</div>
+                        <div className="release-label">{t.single}</div>
                         <img
                             className="release-art"
                             src="/assets/single_redii.jpg"
@@ -75,7 +109,7 @@ export default function Home() {
                     </div>
 
                     <div className="home-album">
-                        <div className="release-label home-album-label">The album</div>
+                        <div className="release-label home-album-label">{t.album}</div>
                         <SpotifyEmbed
                             src={LINKS.spotifyAlbumEmbed}
                             title="Borscht Porsche album on Spotify"
@@ -86,21 +120,21 @@ export default function Home() {
 
                     <div className="release-card card-next">
                         <div className="card-next-head">
-                            <div className="release-label card-next-title">Next album</div>
-                            <div className="card-next-badge">In the works</div>
+                            <div className="release-label card-next-title">{t.next}</div>
+                            <div className="card-next-badge">{t.badge}</div>
                         </div>
                         <img
                             className="release-art release-art-white"
                             src="/assets/next_album_white.png"
                             alt="Next album"
                         />
-                        <div className="card-next-caption">No link yet - check back soon.</div>
+                        <div className="card-next-caption">{t.caption}</div>
                     </div>
                 </div>
 
                 <DriveBy />
                 <Footer>
-                    <BrotherCounter />
+                    <BrotherCounter noun={t.noun} />
                 </Footer>
             </div>
         </div>

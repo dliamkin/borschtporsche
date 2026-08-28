@@ -5,7 +5,7 @@ const WORDS = ["Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", 
 const SNAP_AFTER_MS = 1400; // idle time before the count gets corrected
 const HOLD_MS = 2600; // how long the correction stays up
 
-export default function BrotherCounter() {
+export default function BrotherCounter({ noun = "brothers" }) {
     const [count, setCount] = useState(0); // index into WORDS
     const [correcting, setCorrecting] = useState(false);
     const timer = useRef(null);
@@ -36,7 +36,7 @@ export default function BrotherCounter() {
 
     return (
         <button type="button" className={cls} onClick={bump} aria-live="polite">
-            {correcting ? "It's just two brothers." : `${WORDS[count]} brothers.`}
+            {correcting ? `It's just two ${noun}.` : `${WORDS[count]} ${noun}.`}
         </button>
     );
 }

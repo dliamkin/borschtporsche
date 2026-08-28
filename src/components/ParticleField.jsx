@@ -16,6 +16,7 @@ const COUNT_DESKTOP = 140;
 const COUNT_MOBILE = 70;
 const INTERACTIVE = "a, button, input, textarea, select, label, form, [role='button']";
 const DRAG_STEP = 44; // px of travel between wave rings / notes
+export const BURST_EVENT = "bp:shove";
 
 export default function ParticleField({ onSpark, onDrag }) {
     const canvasRef = useRef(null);
@@ -73,14 +74,14 @@ export default function ParticleField({ onSpark, onDrag }) {
 
         // Push particles away from (cx, cy); `dir` biases the push along the
         // drag direction so a wave rolls with the hand.
-        const shove = (cx, cy, strength, dir) => {
+        const shove = (cx, cy, strength, dir, reachOverride = null) => {
             for (const p of particles) {
                 const px = p.x * w + par.x * p.z * 40;
                 const py = p.y * h + par.y * p.z * 40;
                 const dx = px - cx;
                 const dy = py - cy;
                 const d = Math.hypot(dx, dy) || 1;
-                const reach = 180 + p.z * 120;
+                const reach = reachOverride ?? 180 + p.z * 120;
                 if (d > reach) continue;
                 const k = (1 - d / reach) * (0.35 + p.z) * strength;
                 p.vx += (dx / d) * k + (dir ? dir.x * k * 0.6 : 0);
@@ -123,6 +124,16 @@ export default function ParticleField({ onSpark, onDrag }) {
             if (!drag.on) return;
             drag.on = false;
             document.body.style.userSelect = "";
+        };
+        // Programmatic blast: `window.dispatchEvent(new CustomEvent("bp:shove",
+        // { detail: { x, y, strength } }))` with viewport coords. Reaches the
+        // whole field, not just the usual radius - Beet Mode uses it.
+        const onBurst = (e) => {
+            const r = host.getBoundingClientRect();
+            const x = (e.detail?.x ?? window.innerWidth / 2) - r.left;
+            const y = (e.detail?.y ?? window.innerHeight / 2) - r.top;
+            ripples.push({ x, y, t: 0, big: true });
+            shove(x, y, e.detail?.strength ?? 6, null, Math.max(w, h));
         };
 
         const drawParticle = (p, time) => {
@@ -216,6 +227,7 @@ export default function ParticleField({ onSpark, onDrag }) {
         window.addEventListener("pointermove", onDragMove, { passive: true });
         window.addEventListener("pointerup", onUp);
         window.addEventListener("pointercancel", onUp);
+        window.addEventListener(BURST_EVENT, onBurst);
 
         let raf = 0;
         let last = performance.now();
@@ -237,6 +249,7 @@ export default function ParticleField({ onSpark, onDrag }) {
             ro.disconnect();
             window.removeEventListener("pointermove", onMove);
             host.removeEventListener("pointerdown", onDown);
+            window.removeEventListener(BURST_EVENT, onBurst);
             window.removeEventListener("pointermove", onDragMove);
             window.removeEventListener("pointerup", onUp);
             window.removeEventListener("pointercancel", onUp);
