@@ -1,9 +1,13 @@
 import { LINKS } from "../data/links.js";
 
-export default function Footer() {
+// `children` render inside the copyright line (the home page slots an easter egg in here).
+export default function Footer({ children }) {
     return (
         <footer className="footer">
-            <div className="footer-copy">© 2026 Borscht Porsche</div>
+            <div className="footer-copy">
+                © 2026 Borscht Porsche
+                {children}
+            </div>
             <div className="footer-links">
                 <a href={LINKS.spotifyArtist} target="_blank" rel="noreferrer">
                     Spotify

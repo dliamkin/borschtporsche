@@ -110,11 +110,18 @@ img {
     background: rgba(0, 0, 0, 0.6);
 }
 
+/* Gradient-clipped like .h1-gradient; drop-shadow filter instead of text-shadow,
+   which would bleed through the transparent text fill. */
 .nav-wordmark {
     font: 600 18px/1 var(--font-heading);
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--text);
+    background: linear-gradient(120deg, var(--pink-mid), var(--pink-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+    padding-right: 1px; /* keep the clipped letter-spacing tail from cropping */
 }
 
 .nav-links {

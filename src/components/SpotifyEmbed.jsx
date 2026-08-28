@@ -7,7 +7,9 @@ export default function SpotifyEmbed({ src, title, height, loading = "lazy", com
     const [loaded, setLoaded] = useState(false);
 
     return (
-        <div className={`spotify-embed${loaded ? " is-loaded" : ""}${compact ? " is-compact" : ""}`}>
+        <div
+            className={`spotify-embed${loaded ? " is-loaded" : ""}${compact ? " is-compact" : ""}`}
+        >
             <div className="spotify-embed-placeholder" aria-hidden="true">
                 <div className="spotify-embed-eq">
                     {BARS.map((h, i) => (

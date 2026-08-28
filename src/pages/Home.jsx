@@ -3,10 +3,16 @@ import Footer from "../components/Footer.jsx";
 import AmbientLayers from "../components/AmbientLayers.jsx";
 import ParticleField from "../components/ParticleField.jsx";
 import SpotifyEmbed from "../components/SpotifyEmbed.jsx";
+import BrotherCounter from "../components/BrotherCounter.jsx";
+import DriveBy from "../components/DriveBy.jsx";
+import useBeetMode from "../lib/useBeetMode.js";
 import { LINKS } from "../data/links.js";
 import "../styles/home.css";
+import "../styles/easter-eggs.css";
 
 export default function Home() {
+    const { beet, wobbling, onLogoTap } = useBeetMode();
+
     return (
         <div className="home">
             <div className="home-bg" />
@@ -18,10 +24,18 @@ export default function Home() {
                 <Nav />
 
                 <div className="home-hero">
-                    <img className="home-logo" src="/assets/logo_no_bg.png" alt="Borscht Porsche" />
+                    <img
+                        className={`home-logo${wobbling ? " is-wobbling" : ""}`}
+                        src="/assets/logo_no_bg.png"
+                        alt="Borscht Porsche"
+                        draggable="false"
+                        onClick={onLogoTap}
+                    />
                     <div className="home-tagline">
                         Debut album out now · new single with REDII
-                        <span className="home-tagline-seg3"> · next album simmering</span>
+                        <span className="home-tagline-seg3">
+                            {beet ? " · beets simmering" : " · next album simmering"}
+                        </span>
                     </div>
                     <div className="home-cta">
                         <a
@@ -84,7 +98,10 @@ export default function Home() {
                     </div>
                 </div>
 
-                <Footer />
+                <DriveBy />
+                <Footer>
+                    <BrotherCounter />
+                </Footer>
             </div>
         </div>
     );

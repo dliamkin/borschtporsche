@@ -1,0 +1,143 @@
+/* ---------- Easter eggs (home page) ---------- */
+
+/* Beet Mode: Konami code / five logo taps. Body class set by useBeetMode. */
+body.beet-mode {
+    --pink: #e6395f;
+    --pink-mid: #b8123d;
+    --pink-light: #f27f98;
+    --pink-deep: #6b0d29;
+    --hairline: rgba(230, 57, 95, 0.16);
+    --hairline-strong: rgba(230, 57, 95, 0.24);
+    --card-hairline: rgba(230, 57, 95, 0.2);
+}
+body.beet-mode .h1-gradient {
+    background-image: linear-gradient(120deg, #b8123d, #f27f98);
+}
+body.beet-mode .home-scrim {
+    filter: hue-rotate(-24deg) saturate(1.25);
+}
+
+@keyframes bpWobble {
+    0%,
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+    20% {
+        transform: rotate(-4deg) scale(1.04);
+    }
+    45% {
+        transform: rotate(3deg) scale(1.05);
+    }
+    70% {
+        transform: rotate(-2deg) scale(1.02);
+    }
+}
+.home-logo {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.home-logo.is-wobbling {
+    animation: bpWobble 0.9s ease-in-out;
+}
+
+/* Brother counter: lives in the footer copy line. */
+.brother-counter {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.2s ease;
+}
+.brother-counter::before {
+    content: "\00a0· "; /* nbsp so the leading space doesn't collapse */
+}
+.brother-counter.is-counting {
+    color: rgba(245, 238, 242, 0.75);
+}
+.brother-counter.is-correcting {
+    color: var(--pink);
+}
+
+/* Drive-by Porsche: sits on the footer's top hairline, crosses once per session. */
+.driveby {
+    position: relative;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+}
+.driveby-lane {
+    position: absolute;
+    left: -110px;
+    bottom: 0;
+    animation: bpDriveBy 11s linear forwards;
+    will-change: transform;
+}
+@keyframes bpDriveBy {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(calc(100vw + 220px));
+    }
+}
+.driveby-car {
+    display: block;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0 0 1px;
+    color: var(--pink);
+    opacity: 0.4;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.3s ease;
+}
+.driveby-car:hover {
+    opacity: 0.8;
+}
+.driveby-car svg {
+    display: block;
+}
+.driveby-car.is-fleeing {
+    opacity: 0.9;
+    animation: bpFlee 0.9s cubic-bezier(0.5, 0, 0.9, 0.4) forwards;
+}
+@keyframes bpFlee {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    12% {
+        transform: translateX(-6px) translateY(-3px) rotate(-3deg);
+    }
+    100% {
+        transform: translateX(130vw) translateY(0);
+    }
+}
+
+@media (max-width: 700px) {
+    .driveby-car svg {
+        width: 72px;
+        height: 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-logo.is-wobbling {
+        animation: none;
+    }
+}
+
+/* Phones hide the third tagline segment; beet mode is short enough to show. */
+@media (max-width: 700px) {
+    body.beet-mode .home-tagline-seg3 {
+        display: inline;
+    }
+}

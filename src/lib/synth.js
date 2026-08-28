@@ -177,3 +177,33 @@ export function playWhoosh() {
     src.start(t);
     src.stop(t + len);
 }
+
+// Two short beep-beep horn honks - the drive-by Porsche on the home page.
+export function playHonk() {
+    if (!ctx || ctx.state !== "running") return;
+    const honk = (at, dur) => {
+        const t = ctx.currentTime + at;
+        const env = ctx.createGain();
+        env.gain.setValueAtTime(0.0001, t);
+        env.gain.exponentialRampToValueAtTime(0.5, t + 0.02);
+        env.gain.setValueAtTime(0.5, t + dur - 0.04);
+        env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        const lp = ctx.createBiquadFilter();
+        lp.type = "lowpass";
+        lp.frequency.value = 1400;
+        // A real horn is two notes a third apart, slightly out of tune with each other.
+        for (const f of [415, 523]) {
+            const osc = ctx.createOscillator();
+            osc.type = "square";
+            osc.frequency.value = f;
+            osc.detune.value = 6;
+            osc.connect(lp);
+            osc.start(t);
+            osc.stop(t + dur + 0.05);
+        }
+        lp.connect(env);
+        env.connect(master);
+    };
+    honk(0, 0.16);
+    honk(0.24, 0.22);
+}
