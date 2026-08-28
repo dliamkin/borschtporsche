@@ -5,6 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/png" href="/assets/logo_no_bg.png" />
         <title>Borscht Porsche</title>
+        <!-- Google Analytics (gtag.js). send_page_view is off because this is a
+             single-page app: App.jsx sends a page_view on every route change instead. -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-BB639GQHXN"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", "G-BB639GQHXN", { send_page_view: false });
+        </script>
         <meta
             name="description"
             content="Borscht Porsche - self-titled debut album out now. New single with REDII. Next album simmering."

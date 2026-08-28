@@ -14,10 +14,26 @@ function ScrollToTop() {
     return null;
 }
 
+// Google Analytics: the gtag snippet in index.html has send_page_view off, so
+// report a page_view here on the initial load and on every client-side route change.
+function PageViews() {
+    const { pathname, search } = useLocation();
+    useEffect(() => {
+        if (typeof window.gtag !== "function") return; // e.g. blocked by an ad blocker
+        window.gtag("event", "page_view", {
+            page_path: pathname + search,
+            page_location: window.location.href,
+            page_title: document.title,
+        });
+    }, [pathname, search]);
+    return null;
+}
+
 export default function App() {
     return (
         <>
             <ScrollToTop />
+            <PageViews />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/recipes" element={<Recipes />} />
