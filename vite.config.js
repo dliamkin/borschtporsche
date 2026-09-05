@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 // (/mnt/c/...), so when the dev server runs inside WSL, watch by polling
 // instead - otherwise hot reload never triggers. Native Windows runs keep the
 // normal event-based watcher.
-// Really just a preference for dev convenience; the app itself is fully 
+// Really just a preference for dev convenience; the app itself is fully
 // cross-platform and deployable anywhere.
 const runningInWSL = !!process.env.WSL_DISTRO_NAME;
 

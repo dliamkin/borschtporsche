@@ -6,6 +6,7 @@ const NAV_ITEMS = [
     { to: "/", label: "Home" },
     // TODO: Re-enable recipes when we have more than one recipe. For now, the recipes page is just a placeholder.
     // { to: "/recipes", label: "Recipes" },
+    { to: "/merch", label: "Merch" },
     { to: "/films", label: "Films" },
     { to: "/contact", label: "Contact" },
 ];

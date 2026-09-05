@@ -1,0 +1,153 @@
+/* ---------- Thank you (post-checkout return from Fourthwall) ---------- */
+.thanks-page {
+    position: relative;
+    overflow: clip; /* not `hidden` - that would break the sticky nav */
+}
+.thanks-page .page-main,
+.thanks-page .footer {
+    position: relative;
+    z-index: 1;
+}
+
+.thanks-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 30%, rgba(58, 16, 44, 0.45), transparent 70%);
+}
+
+.thanks-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 64px 64px;
+}
+
+.thanks-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 640px;
+    background: rgba(12, 9, 11, 0.66);
+    border: 1px solid rgba(242, 143, 216, 0.2);
+    border-radius: 12px;
+    padding: 40px 44px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    animation: thanksIn 0.7s ease-out both;
+}
+@keyframes thanksIn {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+.thanks-mark {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(242, 143, 216, 0.5);
+    color: var(--pink-light);
+    font: 600 24px/1 var(--font-heading);
+    box-shadow: 0 0 22px rgba(217, 79, 174, 0.35);
+}
+
+.thanks-lede {
+    margin: 0;
+    font: 400 16px/1.65 var(--font-body);
+    color: rgba(245, 238, 242, 0.75);
+}
+
+/* ---------- Steps ---------- */
+.thanks-steps {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.thanks-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+.thanks-step-num {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--hairline-strong);
+    color: var(--pink);
+    font: 600 13px/1 var(--font-heading);
+}
+.thanks-step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.thanks-step-title {
+    margin: 0;
+    font: 600 15px/1.3 var(--font-heading);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--pink);
+}
+.thanks-step-text {
+    margin: 0;
+    font: 400 14px/1.6 var(--font-body);
+    color: rgba(245, 238, 242, 0.65);
+}
+
+/* ---------- Actions ---------- */
+.thanks-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+    .thanks-main {
+        padding: 32px 36px 48px;
+    }
+    .thanks-panel {
+        padding: 32px 30px;
+    }
+}
+
+@media (max-width: 700px) {
+    .thanks-main {
+        padding: 18px 20px 36px;
+        align-items: flex-start;
+    }
+    .thanks-panel {
+        padding: 26px 22px;
+        gap: 16px;
+    }
+    .thanks-actions {
+        flex-direction: column;
+    }
+    .thanks-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thanks-panel {
+        animation: none;
+    }
+}
